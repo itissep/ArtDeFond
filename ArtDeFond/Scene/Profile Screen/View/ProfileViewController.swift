@@ -8,12 +8,6 @@
 import UIKit
 import SnapKit
 
-// move tableHeaderView to header of the table section ???
-// also dont forget to change trailing and leading constraints
-// keep in mind leading padding in collection view
-
-// loader
-
 
 class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayout {
     
@@ -29,7 +23,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         
-        tableView.register(MyPicturesCell.self, forCellReuseIdentifier: MyPicturesCell.reusableId)
+        tableView.register(ProfilePicturesTableCell.self, forCellReuseIdentifier: ProfilePicturesTableCell.reusableId)
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         
@@ -115,7 +109,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
     
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-//        label.text = "Прекрасное описание чудесного человека с красивым именем. История данной личности останется неразгаданной загадкой. Это все, что об этом можно сказать."
+        
         label.text = ""
         label.numberOfLines = 0
         label.textColor = Constants.Colors.darkRed
@@ -197,10 +191,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
     
     
     private func configureUser(){
-        print(viewModel.user)
-//        nicknameLabel.fadeTransition(0.4)
         nicknameLabel.text = viewModel.user?.nickname.uppercased()
-//        descriptionLabel.fadeTransition(0.4)
         descriptionLabel.text = viewModel.user?.description
         
         guard let balance = viewModel.user?.account_balance else {
@@ -210,7 +201,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
         
     }
     
-    @available(iOS 15.0, *) // fix it later
     @objc
     private func addTapped() {
         let settingsViewController = UserSettingsViewController()
@@ -220,7 +210,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
         }
         present(settingsViewController, animated: true) {
-//            self.newsTableView.deselectRow(at: indexPath, animated: true)
         }
     }
     
@@ -357,7 +346,7 @@ extension ProfileViewController: UICollectionViewDataSource {
 
 extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as? MyPicturesCell
+        let cell = tableView.cellForRow(at: indexPath) as? ProfilePicturesTableCell
         
         guard
             let cell = cell,
@@ -386,7 +375,7 @@ extension ProfileViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MyPicturesCell.reusableId) as? MyPicturesCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: ProfilePicturesTableCell.reusableId) as? ProfilePicturesTableCell
         else {
             fatalError("unexpected cell")
         }
@@ -397,6 +386,7 @@ extension ProfileViewController: UITableViewDataSource {
         if let cellModel = cellModel {
             cell.configure(model: cellModel)
         }
+        cell.selectionStyle = .none
         return cell
     }
 }

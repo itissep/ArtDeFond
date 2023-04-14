@@ -28,11 +28,12 @@
 		2C28A2BE28B67B5F00233601 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C28A2BD28B67B5F00233601 /* UIView.swift */; };
 		2C5491AE28B4C7EE0012032B /* UIAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5491AD28B4C7EE0012032B /* UIAlertController.swift */; };
 		2C5491B028B4DD460012032B /* OrderDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5491AF28B4DD460012032B /* OrderDetailsViewController.swift */; };
+		2C81DEE528BCA84500CAB6AD /* WaterfallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C81DEE428BCA84500CAB6AD /* WaterfallViewModel.swift */; };
 		2C8C13DC28B52A4900AC3921 /* OrderAndPictureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C13DB28B52A4900AC3921 /* OrderAndPictureModel.swift */; };
 		2C8C13DE28B52A7400AC3921 /* OrdersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C13DD28B52A7400AC3921 /* OrdersTableViewCell.swift */; };
 		2C8C13E228B5669E00AC3921 /* FeedModelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C13E128B5669E00AC3921 /* FeedModelViewModel.swift */; };
 		2C8D7C9F28B219F80036E784 /* AboutMeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8D7C9E28B219F80036E784 /* AboutMeViewController.swift */; };
-		2C8D7CA128B22E930036E784 /* MyPicturesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8D7CA028B22E930036E784 /* MyPicturesCell.swift */; };
+		2C8D7CA128B22E930036E784 /* ProfilePicturesTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8D7CA028B22E930036E784 /* ProfilePicturesTableCell.swift */; };
 		2C97AFE328B299AD006CDD55 /* UserSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C97AFE228B299AD006CDD55 /* UserSettingsViewController.swift */; };
 		2C97AFE528B29D83006CDD55 /* AddressesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C97AFE428B29D83006CDD55 /* AddressesManager.swift */; };
 		2C97AFE928B2A035006CDD55 /* AddressesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C97AFE828B2A035006CDD55 /* AddressesViewController.swift */; };
@@ -64,7 +65,7 @@
 		8B40537828B59F3000E6E776 /* CostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B40537728B59F3000E6E776 /* CostViewModel.swift */; };
 		8B40537A28B59F3900E6E776 /* CostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B40537928B59F3900E6E776 /* CostModel.swift */; };
 		8B40537E28B5FBB700E6E776 /* Screen Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B40537D28B5FBB700E6E776 /* Screen Size.swift */; };
-		8B40538028B5FC5100E6E776 /* CollectionCellSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B40537F28B5FC5100E6E776 /* CollectionCellSearch.swift */; };
+		8B40538028B5FC5100E6E776 /* SearchTagCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B40537F28B5FC5100E6E776 /* SearchTagCollectionCell.swift */; };
 		8B51DE4A28A97DCB002E10AC /* AppDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B51DE4928A97DCB002E10AC /* AppDependencies.swift */; };
 		8B51DE4D28A97E80002E10AC /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B51DE4C28A97E80002E10AC /* UINavigationController.swift */; };
 		8B5DE2F528AABAC400852B34 /* CustomTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5DE2F428AABAC400852B34 /* CustomTextFieldView.swift */; };
@@ -104,7 +105,7 @@
 		CE36C8B928B6B8FA006DF9BC /* WaterfallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE36C8B828B6B8FA006DF9BC /* WaterfallViewController.swift */; };
 		CE36C8BC28B6B963006DF9BC /* CHTCollectionViewWaterfallLayout in Frameworks */ = {isa = PBXBuildFile; productRef = CE36C8BB28B6B963006DF9BC /* CHTCollectionViewWaterfallLayout */; };
 		CE36C8BE28B6BA96006DF9BC /* WaterfallCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE36C8BD28B6BA95006DF9BC /* WaterfallCollectionViewCell.swift */; };
-		CE36C8C128B6CFE9006DF9BC /* ARKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE36C8C028B6CFE9006DF9BC /* ARKit.swift */; };
+		CE36C8C128B6CFE9006DF9BC /* ARKitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE36C8C028B6CFE9006DF9BC /* ARKitViewController.swift */; };
 		CE36C8C328B6D02E006DF9BC /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE36C8C228B6D02E006DF9BC /* Grid.swift */; };
 		CEE9CCA028B4C74A00F1B4C9 /* TagsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE9CC9F28B4C74A00F1B4C9 /* TagsModel.swift */; };
 		CEE9CCA228B4C79D00F1B4C9 /* CollectionCellSignUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE9CCA128B4C79D00F1B4C9 /* CollectionCellSignUp.swift */; };
@@ -131,11 +132,12 @@
 		2C28A2BD28B67B5F00233601 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		2C5491AD28B4C7EE0012032B /* UIAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertController.swift; sourceTree = "<group>"; };
 		2C5491AF28B4DD460012032B /* OrderDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDetailsViewController.swift; sourceTree = "<group>"; };
+		2C81DEE428BCA84500CAB6AD /* WaterfallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterfallViewModel.swift; sourceTree = "<group>"; };
 		2C8C13DB28B52A4900AC3921 /* OrderAndPictureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OrderAndPictureModel.swift; path = "ArtDeFond/Scene/Order Info Screen/View/OrderAndPictureModel.swift"; sourceTree = SOURCE_ROOT; };
 		2C8C13DD28B52A7400AC3921 /* OrdersTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersTableViewCell.swift; sourceTree = "<group>"; };
 		2C8C13E128B5669E00AC3921 /* FeedModelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModelViewModel.swift; sourceTree = "<group>"; };
 		2C8D7C9E28B219F80036E784 /* AboutMeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutMeViewController.swift; sourceTree = "<group>"; };
-		2C8D7CA028B22E930036E784 /* MyPicturesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPicturesCell.swift; sourceTree = "<group>"; };
+		2C8D7CA028B22E930036E784 /* ProfilePicturesTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePicturesTableCell.swift; sourceTree = "<group>"; };
 		2C97AFE228B299AD006CDD55 /* UserSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsViewController.swift; sourceTree = "<group>"; };
 		2C97AFE428B29D83006CDD55 /* AddressesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressesManager.swift; sourceTree = "<group>"; };
 		2C97AFE828B2A035006CDD55 /* AddressesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressesViewController.swift; sourceTree = "<group>"; };
@@ -166,7 +168,7 @@
 		8B40537728B59F3000E6E776 /* CostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostViewModel.swift; sourceTree = "<group>"; };
 		8B40537928B59F3900E6E776 /* CostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostModel.swift; sourceTree = "<group>"; };
 		8B40537D28B5FBB700E6E776 /* Screen Size.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Screen Size.swift"; sourceTree = "<group>"; };
-		8B40537F28B5FC5100E6E776 /* CollectionCellSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCellSearch.swift; sourceTree = "<group>"; };
+		8B40537F28B5FC5100E6E776 /* SearchTagCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTagCollectionCell.swift; sourceTree = "<group>"; };
 		8B51DE4928A97DCB002E10AC /* AppDependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDependencies.swift; sourceTree = "<group>"; };
 		8B51DE4C28A97E80002E10AC /* UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
 		8B5DE2F428AABAC400852B34 /* CustomTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldView.swift; sourceTree = "<group>"; };
@@ -198,7 +200,7 @@
 		8BF53C9828A4257E001B5AC3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE36C8B828B6B8FA006DF9BC /* WaterfallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterfallViewController.swift; sourceTree = "<group>"; };
 		CE36C8BD28B6BA95006DF9BC /* WaterfallCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterfallCollectionViewCell.swift; sourceTree = "<group>"; };
-		CE36C8C028B6CFE9006DF9BC /* ARKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARKit.swift; sourceTree = "<group>"; };
+		CE36C8C028B6CFE9006DF9BC /* ARKitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARKitViewController.swift; sourceTree = "<group>"; };
 		CE36C8C228B6D02E006DF9BC /* Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		CEE9CC9F28B4C74A00F1B4C9 /* TagsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagsModel.swift; sourceTree = "<group>"; };
 		CEE9CCA128B4C79D00F1B4C9 /* CollectionCellSignUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionCellSignUp.swift; sourceTree = "<group>"; };
@@ -299,7 +301,7 @@
 			isa = PBXGroup;
 			children = (
 				8BA9ECDA28AD250000DFF138 /* ProfileViewController.swift */,
-				2C8D7CA028B22E930036E784 /* MyPicturesCell.swift */,
+				2C8D7CA028B22E930036E784 /* ProfilePicturesTableCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -362,6 +364,49 @@
 				2C5491AF28B4DD460012032B /* OrderDetailsViewController.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		2C81DEDC28BCA7AA00CAB6AD /* Search Screen */ = {
+			isa = PBXGroup;
+			children = (
+				2C81DEDE28BCA7F800CAB6AD /* View */,
+			);
+			path = "Search Screen";
+			sourceTree = "<group>";
+		};
+		2C81DEDD28BCA7C700CAB6AD /* Waterfall Screen */ = {
+			isa = PBXGroup;
+			children = (
+				2C81DEE128BCA81E00CAB6AD /* ViewModel */,
+				2C81DEDF28BCA80E00CAB6AD /* View */,
+			);
+			path = "Waterfall Screen";
+			sourceTree = "<group>";
+		};
+		2C81DEDE28BCA7F800CAB6AD /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8BA9ECD628AD24A700DFF138 /* SearchViewController.swift */,
+				8B40537F28B5FC5100E6E776 /* SearchTagCollectionCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		2C81DEDF28BCA80E00CAB6AD /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CE36C8B828B6B8FA006DF9BC /* WaterfallViewController.swift */,
+				CE36C8BD28B6BA95006DF9BC /* WaterfallCollectionViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		2C81DEE128BCA81E00CAB6AD /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2C81DEE428BCA84500CAB6AD /* WaterfallViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		2C8C13DF28B52B3500AC3921 /* View */ = {
@@ -630,10 +675,8 @@
 			isa = PBXGroup;
 			children = (
 				8B40537C28B5FBA700E6E776 /* Model */,
-				8BA9ECD628AD24A700DFF138 /* SearchViewController.swift */,
-				8B40537F28B5FC5100E6E776 /* CollectionCellSearch.swift */,
-				CE36C8B828B6B8FA006DF9BC /* WaterfallViewController.swift */,
-				CE36C8BD28B6BA95006DF9BC /* WaterfallCollectionViewCell.swift */,
+				2C81DEDC28BCA7AA00CAB6AD /* Search Screen */,
+				2C81DEDD28BCA7C700CAB6AD /* Waterfall Screen */,
 			);
 			path = "Search Screen";
 			sourceTree = "<group>";
@@ -774,7 +817,7 @@
 		CE36C8BF28B6CFD3006DF9BC /* ARKit */ = {
 			isa = PBXGroup;
 			children = (
-				CE36C8C028B6CFE9006DF9BC /* ARKit.swift */,
+				CE36C8C028B6CFE9006DF9BC /* ARKitViewController.swift */,
 				CE36C8C228B6D02E006DF9BC /* Grid.swift */,
 			);
 			path = ARKit;
@@ -893,7 +936,7 @@
 				8B40537028B5984A00E6E776 /* UploadPhotoModel.swift in Sources */,
 				2CEC274428B4AAC30044DBD4 /* String.swift in Sources */,
 				8BA9ECDB28AD250000DFF138 /* ProfileViewController.swift in Sources */,
-				CE36C8C128B6CFE9006DF9BC /* ARKit.swift in Sources */,
+				CE36C8C128B6CFE9006DF9BC /* ARKitViewController.swift in Sources */,
 				2CEC273E28B3D7B20044DBD4 /* NotificationsViewModel.swift in Sources */,
 				2C28A2B128B6337400233601 /* NotificationModel.swift in Sources */,
 				2C97B00A28B37080006CDD55 /* PictureDetailViewModel.swift in Sources */,
@@ -907,14 +950,14 @@
 				CE36C8B928B6B8FA006DF9BC /* WaterfallViewController.swift in Sources */,
 				2C8C13E228B5669E00AC3921 /* FeedModelViewModel.swift in Sources */,
 				8BE7977328B0160D00DC72D9 /* CustomButtomType.swift in Sources */,
-				8B40538028B5FC5100E6E776 /* CollectionCellSearch.swift in Sources */,
+				8B40538028B5FC5100E6E776 /* SearchTagCollectionCell.swift in Sources */,
 				2C97AFF228B2A951006CDD55 /* AddressesViewModel.swift in Sources */,
 				8BA9ECD528AD242800DFF138 /* FeedViewController.swift in Sources */,
 				2C28A2AA28B61D1400233601 /* UIImageView.swift in Sources */,
 				8BE7976628AF629300DC72D9 /* AuthViewController.swift in Sources */,
 				8BE7977028B015D900DC72D9 /* CustomButtonView.swift in Sources */,
 				2CEC274228B4AA7A0044DBD4 /* Date.swift in Sources */,
-				2C8D7CA128B22E930036E784 /* MyPicturesCell.swift in Sources */,
+				2C8D7CA128B22E930036E784 /* ProfilePicturesTableCell.swift in Sources */,
 				2CB5905128B155B4005BFBB1 /* FeedViewModel.swift in Sources */,
 				8BA9ECCB28ACF57D00DFF138 /* TabBarCoordinator.swift in Sources */,
 				2C97AFF028B2A920006CDD55 /* AddressTableViewCell.swift in Sources */,
@@ -954,6 +997,7 @@
 				2C24973F28B1815900551795 /* PictureWithAuthorModel.swift in Sources */,
 				2C97AFFD28B2AFD6006CDD55 /* OrderManager.swift in Sources */,
 				2C28A2B528B6342200233601 /* NotificationCommonTableCell.swift in Sources */,
+				2C81DEE528BCA84500CAB6AD /* WaterfallViewModel.swift in Sources */,
 				2C97B00828B2B953006CDD55 /* ProfileUserModel.swift in Sources */,
 				8B40537528B59B5400E6E776 /* PictureDescriptionModel.swift in Sources */,
 				8B9DC9F228B4AC87002418AC /* InterestViewController.swift in Sources */,
@@ -1098,7 +1142,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2XTS5VKE3A;
+				DEVELOPMENT_TEAM = 35953V9L7K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ArtDeFond/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to take photo";
@@ -1115,7 +1159,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = VKSiriusTeam4.ArtDeFond1;
+				PRODUCT_BUNDLE_IDENTIFIER = VKSiriusTeam4.ArtDeFond12;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -1130,7 +1174,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2XTS5VKE3A;
+				DEVELOPMENT_TEAM = 35953V9L7K;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ArtDeFond/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to take photo";
@@ -1147,7 +1191,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = VKSiriusTeam4.ArtDeFond1;
+				PRODUCT_BUNDLE_IDENTIFIER = VKSiriusTeam4.ArtDeFond12;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

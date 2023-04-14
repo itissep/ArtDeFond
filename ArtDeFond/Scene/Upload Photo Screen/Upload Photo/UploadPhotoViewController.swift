@@ -7,19 +7,32 @@
 
 import UIKit
 import SnapKit
+import TPKeyboardAvoiding
 
 class UploadPhotoViewController: UIViewController {
+    
+    private let scrollView = TPKeyboardAvoidingScrollView()
+    private let contentView = UIView()
     
     private let pictureImageView = UIImageView()
     
     private let titleLabelTextField = LabelTextField(CustomTextFieldViewModel: .init(type: .withoutImage,
                                                                                      keyboardType: .default),
-                                                     labelText: "Название")
+                                                     labelText: "Название картины")
     
     private let aboutPictureLabel = UILabel()
     private let aboutPictureTextView = UITextView()
     private let nextScreenButton = CustomButton(viewModel: .init(type: .dark, labelText: "Далее"))
     
+    lazy var someView: UIView = {
+        let view = UIView()
+        
+        view.layer.cornerRadius = 16
+        view.backgroundColor = Constants.Colors.lightRed
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     private let viewModel: UploadPhotoViewModel
     
@@ -42,6 +55,30 @@ class UploadPhotoViewController: UIViewController {
         bindToViewModel()
     }
     
+    private func scrollViewSetup(){
+        view.addSubview(scrollView)
+        
+        scrollView.keyboardDismissMode = .interactive
+        scrollView.isScrollEnabled = true
+        scrollView.bounces = false
+        scrollView.showsVerticalScrollIndicator = false
+        
+        scrollView.snp.makeConstraints{ make in
+            make.edges.equalToSuperview()
+        }
+        
+        scrollView.addSubview(contentView)
+        
+        contentView.snp.makeConstraints{ make in
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().priority(250)
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview().priority(250)
+            
+        }
+    }
+    
+    
     private func bindToViewModel(){
         viewModel.didGoToNextScreen = {[weak self] vc in
             self?.navigationController?.pushViewController(vc, animated: true)
@@ -55,27 +92,31 @@ class UploadPhotoViewController: UIViewController {
         aboutPictureLabelSetup()
         aboutPictureTextViewSetup()
         nextScreenButtonSetup()
+        scrollViewSetup()
     }
     
     private func pictureImageViewSetup(){
-        view.addSubview(pictureImageView)
+        contentView.addSubview(pictureImageView)
         
         pictureImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapOnImageView)))
         pictureImageView.isUserInteractionEnabled = true
+        
+        pictureImageView.image = UIImage(named: "Imageholder")
         pictureImageView.contentMode = .scaleAspectFill
-        pictureImageView.image = Constants.Icons.avatarPlaceholder
+        
         pictureImageView.backgroundColor = Constants.Colors.dirtyWhite
         pictureImageView.layer.cornerRadius = 16
+        pictureImageView.layer.masksToBounds = true
         
         pictureImageView.snp.makeConstraints{ make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(5)
+            make.top.equalTo(contentView.snp.top).offset(5)
             make.leading.trailing.equalToSuperview().inset(30)
             make.height.equalTo(200)
         }
     }
     
     private func titleLabelTextFieldSetup(){
-        view.addSubview(titleLabelTextField)
+        contentView.addSubview(titleLabelTextField)
         
         titleLabelTextField.snp.makeConstraints{make in
             make.top.equalTo(pictureImageView.snp.bottom).offset(40)
@@ -84,7 +125,7 @@ class UploadPhotoViewController: UIViewController {
     }
     
     private func aboutPictureLabelSetup(){
-        view.addSubview(aboutPictureLabel)
+        contentView.addSubview(aboutPictureLabel)
         aboutPictureLabel.text = "Опишите вашу картину"
         aboutPictureLabel.font = Constants.Fonts.regular15
         aboutPictureLabel.textColor = Constants.Colors.brown
@@ -96,27 +137,35 @@ class UploadPhotoViewController: UIViewController {
     }
     
     private func aboutPictureTextViewSetup(){
-        view.addSubview(aboutPictureTextView)
+        contentView.addSubview(someView)
+        someView.addSubview(aboutPictureTextView)
         aboutPictureTextView.textColor = Constants.Colors.darkRed
         aboutPictureTextView.font = Constants.Fonts.regular17
         aboutPictureTextView.layer.cornerRadius = 16
-        aboutPictureTextView.backgroundColor = Constants.Colors.lightRed
+        aboutPictureTextView.backgroundColor = .clear
         
-        aboutPictureTextView.snp.makeConstraints{make in
+        someView.snp.makeConstraints{make in
             make.top.equalTo(aboutPictureLabel.snp.bottom).offset(4)
             make.leading.trailing.equalToSuperview().inset(30)
             make.height.equalTo(180)
         }
+        
+        aboutPictureTextView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(10)
+            make.trailing.equalToSuperview().inset(10)
+            make.bottom.equalToSuperview().inset(10)
+        }
     }
     
     private func nextScreenButtonSetup(){
-        view.addSubview(nextScreenButton)
+        contentView.addSubview(nextScreenButton)
         
         nextScreenButton.addTarget(self, action: #selector(tapOnNextButton), for: .touchUpInside)
         
         nextScreenButton.snp.makeConstraints{make in
             make.leading.trailing.equalToSuperview().inset(30)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(30)
+            make.top.equalTo(aboutPictureTextView.snp.bottom).offset(30)
             make.height.equalTo(44)
         }
     }
@@ -155,11 +204,21 @@ class UploadPhotoViewController: UIViewController {
     
     @objc
     private func tapOnNextButton(){
-        viewModel.goToNextScreen(image: pictureImageView.image ?? Constants.Icons.avatarPlaceholder,
-                                 pictureName: titleLabelTextField.returnText(),
-                                 pictureDescription: aboutPictureTextView.text)
+        
+        if pictureImageView.image != UIImage(named: "Imageholder"),
+           titleLabelTextField.returnText() != "",
+           aboutPictureTextView.text != ""
+        {
+            viewModel.goToNextScreen(image: pictureImageView.image ?? Constants.Icons.avatarPlaceholder,
+                                     pictureName: titleLabelTextField.returnText(),
+                                     pictureDescription: aboutPictureTextView.text)
+        } else {
+            let alert = UIAlertController(title: "Пустые поля", message: "Для продолжения необходимо заполнить все поля.", preferredStyle: .alert)
+            let alertAction = UIAlertAction(title: "Хорошо", style: .cancel)
+            alert.addAction(alertAction)
+            present(alert, animated: true)
+        }
     }
-
 }
 
 extension UploadPhotoViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
@@ -180,20 +239,11 @@ extension UploadPhotoViewController: UIImagePickerControllerDelegate, UINavigati
             
             let url = info[.imageURL]
             let data = try? Data(contentsOf: url as! URL)
-
+            
             if let imageData = data {
                 let image = UIImage(data: imageData)
                 pictureImageView.image = image
             }
-            
-            
-            
-//            guard let image = info[.originalImage] as? UIImage else{
-//                return
-//            }
-
-//
-//            print(info[.imageURL])
         }
         
         picker.dismiss(animated: true, completion: nil)
