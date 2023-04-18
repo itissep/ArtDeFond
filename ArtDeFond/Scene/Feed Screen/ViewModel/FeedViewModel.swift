@@ -6,33 +6,77 @@
 //
 
 import Foundation
-
+import Combine
 
 class FeedViewModel: NSObject {
-
-    private(set) var auctions : [CircleFeedAuctionModel] = [] {
-            didSet {
-                self.bindFeedViewModelToController()
+    var auctions : [CircleFeedAuctionModel] = []
+    var pictures : [PictureWithAuthorModel] = []
+    @Published var refreshing = false
+    
+    private let pictureService: PictureServiceDescription
+    private let authService: AuthServiceDescription
+    private let coordinator: FeedCoordinatorDescription
+    
+    
+    init(pictureService: PictureServiceDescription,
+         authService: AuthServiceDescription,
+         coordinator: FeedCoordinatorDescription) {
+        self.pictureService = pictureService
+        self.authService = authService
+        self.coordinator = coordinator
+        super.init()
+        fetchData()
+    }
+    
+    // MARK: - Public methods
+    
+    func refresh(){
+        fetchData()
+    }
+    
+    func goToPicture(with id: String) {
+        coordinator.goToProduct(with: id)
+    }
+    
+    // MARK: - Private methods
+    
+    private func fetchData() {
+        refreshing = true
+        
+        let group = DispatchGroup()
+        var outputPictures = [PictureWithAuthorModel]()
+        
+        group.enter()
+        loadPictures { pictures in
+            group.leave()
+            outputPictures = pictures
+        }
+        
+        group.enter()
+        var outputAuctions = [CircleFeedAuctionModel]()
+        pictureService.loadPictureInformation(type: .auctions) { result in
+            switch result {
+            case .failure(let error):
+                print(error)
+                group.leave()
+            case .success(let auctions):
+                auctions.forEach { auction in
+                    let newAuction = CircleFeedAuctionModel(id: auction.id, image: auction.image)
+                    outputAuctions.append(newAuction)
+                }
+                group.leave()
             }
         }
-    
-    private(set) var pictures : [PictureWithAuthorModel] = [] {
-            didSet {
-                self.bindFeedViewModelToController()
-            }
+        
+        group.notify(queue: .main) {
+            self.pictures = outputPictures
+            self.auctions = outputAuctions
+            self.refreshing = false
         }
+    }
     
-    var bindFeedViewModelToController : (() -> ()) = {}
-    
-    var refreshing = false
-    
-    override init() {
-            super.init()
-            fetchData()
-        }
-    
-    func loadPictures(completion: @escaping ([PictureWithAuthorModel]) -> Void) {
-        PictureService.shared.loadPictureInformation(type: .pictures) { [weak self] result in
+    private func loadPictures(completion: @escaping ([PictureWithAuthorModel]) -> Void) {
+        pictureService.loadPictureInformation(type: .pictures) { [weak self] result in
             guard let self = self else {
                 completion([])
                 return
@@ -61,51 +105,14 @@ class FeedViewModel: NSObject {
         }
     }
     
-    func loadUser(for picture: Picture, completion: @escaping (User?) -> Void) {
-        AuthService.shared.getUserInformation(for: picture.author_id) { result in
+    private func loadUser(for picture: Picture, completion: @escaping (User?) -> Void) {
+        authService.getUserInformation(for: picture.author_id) { result in
             switch result {
             case .success(let user):
                 completion(user)
             case .failure( _):
                 completion(nil)
             }
-        }
-    }
-    
-    func fetchData() {
-        refreshing = true
-        
-        let group = DispatchGroup()
-        var outputPictures = [PictureWithAuthorModel]()
-        
-        group.enter()
-        loadPictures { pictures in
-            group.leave()
-            
-            outputPictures = pictures
-        }
-        
-        group.enter()
-        var outputAuctions = [CircleFeedAuctionModel]()
-        PictureService.shared.loadPictureInformation(type: .auctions) { result in
-            switch result {
-            case .failure(let error):
-                print(error)
-                group.leave()
-                
-            case .success(let auctions):
-                auctions.forEach { auction in
-                    let newAuction = CircleFeedAuctionModel(id: auction.id, image: auction.image)
-                    outputAuctions.append(newAuction)
-                }
-                group.leave()
-            }
-        }
-        
-        group.notify(queue: .main) {
-            self.pictures = outputPictures
-            self.auctions = outputAuctions
-            self.refreshing = false
         }
     }
 }

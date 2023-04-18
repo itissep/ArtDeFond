@@ -14,11 +14,12 @@ final class NotificationService: NotificationServiceDescription {
     private let database = Firestore.firestore()
     
     static let shared: NotificationServiceDescription = NotificationService()
+    let authService = AuthService()
     
     private init() {}
     
     func loadNotifications(completion: @escaping (Result<[NotificationModel], Error>) -> Void) {
-        guard let userId = AuthService.shared.userID() else {
+        guard let userId = authService.userID() else {
             return
         }
         
@@ -43,7 +44,7 @@ final class NotificationService: NotificationServiceDescription {
         time: Date,
         completion: @escaping (Result<NotificationModel, Error>) -> Void
     ) {
-        guard let author_id = AuthService.shared.userID() else {
+        guard let author_id = authService.userID() else {
             completion(.failure(SomeErrors.somethingWentWrong))
             return
         }

@@ -33,6 +33,7 @@ class AuthViewController: UIViewController {
     private let signUpButton = UIButton()
     
     weak var delegate: AuthViewContollerDelegate?
+    let authService = AuthService()
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nil, bundle: nil)
@@ -159,7 +160,7 @@ class AuthViewController: UIViewController {
     
     @objc
     private func tapOnSignInButton(){
-        AuthService.shared.signIn(withEmail: emailLabelTextField.returnText(), withPassword: passwordLabelTextField.returnText()) { result in
+        authService.signIn(withEmail: emailLabelTextField.returnText(), withPassword: passwordLabelTextField.returnText()) { result in
             switch result{
             case .failure( _):
                 let alert = UIAlertController(title: "ууупс", message: "Кажется вы ввели что-то неправильно", preferredStyle: .alert)
@@ -183,18 +184,4 @@ class AuthViewController: UIViewController {
         navCont.pushViewController(SignUpViewController(), animated: false)
         present(navCont, animated: true)
     }
-    
-    
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

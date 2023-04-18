@@ -170,7 +170,7 @@ class ExFeedViewModel: NSObject {
         var pictures = [Picture]()
         var outputPictures = [PictureWithAuthorModel]()
         group.enter()
-        PictureService.shared.loadPictureInformation(type: .pictures) { [weak self] result in
+        PictureService().loadPictureInformation(type: .pictures) { [weak self] result in
             switch result {
             case .failure(let error):
                 print(error)
@@ -186,7 +186,7 @@ class ExFeedViewModel: NSObject {
         group.enter()
         
         group.enter()
-        PictureService.shared.loadPictureInformation(type: .auctions) { [weak self] result in
+        PictureService().loadPictureInformation(type: .auctions) { [weak self] result in
             switch result {
             case .failure( _):
                 group.leave()

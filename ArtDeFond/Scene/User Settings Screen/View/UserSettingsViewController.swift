@@ -56,6 +56,8 @@ class UserSettingsViewController: UIViewController {
     }()
     
     
+    let authService = AuthService()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,8 +96,8 @@ extension UserSettingsViewController: UITableViewDelegate {
                     let alert = UIAlertController.createAlert(
                         withTitle: "Хотите выйти из профиля?",
                         message: "Вы всегда можете к нам вернуться!",
-                        buttonString: "Выйти") { _ in
-                            AuthService.shared.signOut { _ in
+                        buttonString: "Выйти") {[weak self] _ in
+                            self?.authService.signOut { _ in
                                  // выкинуть на ленту и обновить вкладку профиля
                                 }
                             }
@@ -104,8 +106,8 @@ extension UserSettingsViewController: UITableViewDelegate {
                     let alert = UIAlertController.createAlert(
                         withTitle: "Хотите удалить профиль?",
                         message: "Это дейстивие нельзя отменить. Вы покинете нас безвозвратно!",
-                        buttonString: "Удалить") { _ in
-                            AuthService.shared.deleteAccount { _ in
+                        buttonString: "Удалить") {[weak self] _ in
+                            self?.authService.deleteAccount { _ in
                                 // выкинуть на ленту и обновить вкладку профиля
                             }
                         }

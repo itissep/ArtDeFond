@@ -13,12 +13,10 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 final class AuthService: AuthServiceDescription {
-    
+    #warning("TODO: remove DB from here")
     private let database = Firestore.firestore()
     
-    static let shared: AuthServiceDescription = AuthService()
-    
-    private init() {}
+    init() {}
     
     func isAuthed() -> Bool {
         return Auth.auth().currentUser != nil

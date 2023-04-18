@@ -8,18 +8,18 @@
 import Foundation
 
 
-
 class AddressesViewModel {
     var addresses: [AddressesModel] = []
     
     var error: Error?
     var refreshing = false
     
+    let authService = AuthService()
     
     func fetchAdresses(completion: @escaping () -> Void) {
         refreshing = true
 
-        guard let userId = AuthService.shared.userID() else {
+        guard let userId = authService.userID() else {
             return
         }
         

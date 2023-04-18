@@ -56,5 +56,4 @@ class AuctionCollectionViewCell: UICollectionViewCell {
         super.prepareForReuse()
         imageView.image = nil
     }
-    
 }

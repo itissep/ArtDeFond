@@ -58,7 +58,7 @@ class NotificationsViewModel: NSObject {
     }
     
     func loadPicture(for notification: NotificationModel, completion: @escaping (Picture?) -> Void) {
-        PictureService.shared.getPictureWithId(with: notification.pictureId) { result in
+        PictureService().getPictureWithId(with: notification.pictureId) { result in
             switch result {
             case .failure( _):
                 completion(nil)

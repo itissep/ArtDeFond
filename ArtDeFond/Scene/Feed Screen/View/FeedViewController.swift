@@ -7,58 +7,19 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout {
+    // UI
+    private lazy var tableView = UITableView()
+    private lazy var collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+    private lazy var refreshControll = UIRefreshControl()
     
-    private var viewModel: FeedViewModel!
+    // Model
+    private var viewModel: FeedViewModel
+    private var subscriptions = Set<AnyCancellable>()
     
-    lazy var feedTableView: UITableView = {
-        let tableView = UITableView()
-        
-        tableView.register(PictureFeedTableCell.self, forCellReuseIdentifier: PictureFeedTableCell.reusableId)
-        tableView.separatorStyle = .none
-        tableView.showsVerticalScrollIndicator = false
-        
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 240
-        tableView.addSubview(refreshControll)
-        
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
-    }()
-    
-    lazy var collectionView: UICollectionView = {
-        
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 64, height: 64)
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 28, bottom: 0, right: 28)
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        
-        collectionView.register(AuctionCollectionViewCell.self, forCellWithReuseIdentifier: AuctionCollectionViewCell.identifier)
-        
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .white
-        return collectionView
-    }()
-    
-    
-    lazy var refreshControll: UIRefreshControl = {
-        let refresh = UIRefreshControl()
-        refresh.tintColor = Constants.Colors.darkRed
-        
-        refresh.addTarget(self, action: #selector(self.refreshing), for: .valueChanged)
-        
-        return refresh
-    }()
-    
-    
-    @objc
-    func refreshing(){
-        callToViewModelForUIUpdate()
-    }
-    
-    
+    // MARK: - Life Cycle
     
     init(viewModel: FeedViewModel) {
         self.viewModel = viewModel
@@ -71,45 +32,27 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        feedTableView.reloadData()
+        tableView.reloadData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        callToViewModelForUIUpdate()
-    }
-    
-    func callToViewModelForUIUpdate(){
-        
-        self.viewModel =  FeedViewModel()
-        self.viewModel.bindFeedViewModelToController = {
-            self.updateDataSource()
-        }
-    }
-    
-    func updateDataSource(){
-        DispatchQueue.main.async {
-            self.feedTableView.reloadData()
-            self.collectionView.reloadData()
-            self.refreshControll.endRefreshing()
-        }
-        
+        bindingSetup()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         view.addSubview(collectionView)
-        // move to tableView header
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(10)
             make.trailing.leading.equalToSuperview()
             make.height.equalTo(64)
         }
         
-        view.addSubview(feedTableView)
-        feedTableView.snp.makeConstraints { make in
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints { make in
             make.top.equalTo(collectionView.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview().inset(25)
             make.bottom.equalToSuperview()
@@ -117,20 +60,78 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout {
         }
     }
     
+    // MARK: - ViewModel Binding
+    
+    func bindingSetup(){
+        viewModel.$refreshing
+            .sink {[weak self] isLoading in
+                if !isLoading {
+                    self?.updateDataSource()
+                }
+            }
+            .store(in: &subscriptions)
+    }
+    
+    func updateDataSource(){
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            self.collectionView.reloadData()
+            self.refreshControll.endRefreshing()
+        }
+    }
+    
+    // MARK: - UI Setup
     
     private func setup(){
         title = "Лента"
         navigationController?.navigationBar.titleTextAttributes = Constants.Unspecified.titleAttributes
         view.backgroundColor = .white
         
+        tableViewSetup()
+        collectionViewSetup()
+        
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        feedTableView.delegate = self
-        feedTableView.dataSource = self
+        tableView.delegate = self
+        tableView.dataSource = self
     }
     
+    private func tableViewSetup() {
+        tableView.register(PictureFeedTableCell.self, forCellReuseIdentifier: PictureFeedTableCell.reusableId)
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
+        
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 240
+        
+        refreshControll.tintColor = Constants.Colors.darkRed
+        refreshControll.addTarget(self, action: #selector(self.refreshing), for: .valueChanged)
+
+        tableView.addSubview(refreshControll)
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+    }
     
+    private func collectionViewSetup() {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.itemSize = CGSize(width: 64, height: 64)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 28, bottom: 0, right: 28)
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        
+        collectionView.register(AuctionCollectionViewCell.self, forCellWithReuseIdentifier: AuctionCollectionViewCell.identifier)
+        
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .white
+    }
+    
+    // MARK: - Selectors
+    
+    @objc
+    func refreshing(){
+        viewModel.refresh()
+    }
 }
 
 //MARK: - UICollectionViewDelegate
@@ -142,15 +143,14 @@ extension FeedViewController: UICollectionViewDelegate {
             let cell = cell,
             let auctionId = cell.auctionModel?.id
         else { return }
-        present(PictureDetailViewController(viewModel: PictureDetailViewModel(with: auctionId)), animated: true)
-        
-        
+        viewModel.goToPicture(with: auctionId)
     }
 }
 
 //MARK: - UICollectionViewDataSource
 extension FeedViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print(viewModel.auctions.count)
         return viewModel.auctions.count
     }
     
@@ -172,10 +172,7 @@ extension FeedViewController: UITableViewDelegate {
         else {
             return
         }
-        
-        let vc = PictureDetailViewController(viewModel: PictureDetailViewModel(with: pictureId))
-        self.present(vc, animated: true)
-        
+        viewModel.goToPicture(with: pictureId)
     }
 }
 
@@ -218,7 +215,3 @@ extension FeedViewController: UITableViewDataSource {
             return cell
         }
     }
-    
-    
-    
-    

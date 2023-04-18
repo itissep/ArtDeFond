@@ -10,7 +10,7 @@ import Foundation
 
 class ProfileViewModel {
 
-    let userId = AuthService.shared.userID()
+    let userId = AuthService().userID()
     
     private(set) var auctions : [CircleFeedAuctionModel] = [] {
             didSet {
@@ -76,7 +76,7 @@ class ProfileViewModel {
     
     
     func loadPictures(for userId: String, completion: @escaping ([Picture]) -> Void){
-        PictureService.shared.loadPictureInformation(type: .authorsPictures(id: userId)) { result in
+        PictureService().loadPictureInformation(type: .authorsPictures(id: userId)) { result in
             switch result {
             case .failure( _):
                 completion([])
@@ -87,7 +87,7 @@ class ProfileViewModel {
     }
     
     func loadAuctions(for userId: String, completion: @escaping ([CircleFeedAuctionModel]) -> Void){
-        PictureService.shared.loadPictureInformation(type: .authorsAuctions(id: userId)) { result in
+        PictureService().loadPictureInformation(type: .authorsAuctions(id: userId)) { result in
             switch result {
             case .failure( _):
                 completion([])
@@ -103,7 +103,7 @@ class ProfileViewModel {
     }
     
     func loadUser(for userId: String, completion: @escaping (User?) -> Void){
-        AuthService.shared.getUserInformation(for: userId) { result in
+        AuthService().getUserInformation(for: userId) { result in
             switch result {
             case .failure( _):
                 completion(nil)

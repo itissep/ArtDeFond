@@ -25,7 +25,7 @@ class AppCoordinator: AppCoordinatorDescription {
     var navigationController: UINavigationController
 
     var container: Container?
-//    var userService: UserServiceDescription?
+    var authService: AuthServiceDescription?
 
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -49,8 +49,9 @@ class AppCoordinator: AppCoordinatorDescription {
 
     
     func start() {
-
-        if true { #warning("TODO: normal auth service")
+        authService = container?.resolve(AuthServiceDescription.self)
+        guard let authService else { return }
+        if authService.isAuthed() {
             goToHome()
         } else {
             goToAuth()

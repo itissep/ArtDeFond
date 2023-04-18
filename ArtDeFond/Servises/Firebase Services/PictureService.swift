@@ -9,17 +9,14 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-// сделано не правильно, однако времени исправлять нет (синглтон)
+// сделано неправильно, однако времени исправлять нет (синглтон)
 // хорошо было бы сделать отдельную структуру для этого слоя
 
 final class PictureService: PictureServiceDescription {
-
-    
+    #warning("TODO: remove database from here")
     private let database = Firestore.firestore()
     
-    static let shared: PictureServiceDescription = PictureService()
-    
-    private init() {}
+    init() {}
     
     func loadPictureInformation(type: ProductCollectionType, completion: @escaping (Result<[Picture], Error>) -> Void) {
         
@@ -80,7 +77,7 @@ final class PictureService: PictureServiceDescription {
         tags: [String],
         completion: @escaping (Result<Picture, Error>) -> Void
     ) {
-        guard let author_id = AuthService.shared.userID() else {
+        guard let author_id = AuthService().userID() else {
             completion(.failure(SomeErrors.somethingWentWrong))
             return
         }

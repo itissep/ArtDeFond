@@ -68,11 +68,3 @@ final class ImageService: ImageServiceDescription {
         }
     }
 }
-
-enum NetworkError: Error {
-    case shitHappens
-    case imageError
-    case two
-    case three
-    case four
-}

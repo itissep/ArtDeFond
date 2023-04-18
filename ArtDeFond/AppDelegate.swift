@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
 
         FirebaseApp.configure()
+        registerMockDependencies()
         
         let navigationController = UINavigationController()
         appCoordinator = AppCoordinator(navigationController: navigationController)
@@ -39,16 +40,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate {
     private func registerDependencies() {
-//        container.register(PictureServiceDescription.self) { _ in
-////            return UserDefaultsService()
-//        }
+        container.register(PictureServiceDescription.self) { _ in
+            return PictureService()
+        }
+        
+        container.register(AuthServiceDescription.self) { _ in
+            return AuthService()
+        }
     }
 
     private func registerMockDependencies() {
-        //        container.register(UserDefaultsService.self) { _ in
-        //            return UserDefaultsService()
-        //        }
+        container.register(PictureServiceDescription.self) { _ in
+            return MockPictureService()
+        }
         
+        container.register(AuthServiceDescription.self) { _ in
+            return MockAuthService()
+        }
     }
 }
 

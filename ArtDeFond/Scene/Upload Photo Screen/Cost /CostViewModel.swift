@@ -67,7 +67,7 @@ final class CostViewModel{
         }
         
         group.notify(queue: .main) {
-            PictureService.shared.newPicture(
+            PictureService().newPicture(
                 id: id,
                 title: pictureTitle,
                 image: imageNameFromStore,

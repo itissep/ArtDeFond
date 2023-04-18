@@ -12,6 +12,9 @@ import FirebaseFirestoreSwift
 final class OrderService: OrderServiceDescription {
     private let database = Firestore.firestore()
     static let shared: OrderServiceDescription = OrderService()
+    
+    let authService = AuthService()
+    
     private init() {}
     
     
@@ -36,7 +39,7 @@ final class OrderService: OrderServiceDescription {
     func loadOrders(type: OrderType, completion: @escaping (Result<[Order], Error>) -> Void) {
         var ref: Query = database.collection("orders")
         
-        guard let user_id = AuthService.shared.userID() else {
+        guard let user_id = authService.userID() else {
             return
         }
         

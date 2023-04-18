@@ -71,7 +71,7 @@ class OrdersViewModel {
     }
     
     func loadPicture(for order: Order, completion: @escaping (Picture?) -> Void) {
-        PictureService.shared.getPictureWithId(with: order.picture_id) { result in
+        PictureService().getPictureWithId(with: order.picture_id) { result in
             switch result {
             case .failure( _):
                 completion(nil)

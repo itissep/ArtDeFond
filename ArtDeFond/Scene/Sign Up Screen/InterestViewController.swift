@@ -48,6 +48,7 @@ class InterestViewController: UIViewController {
     private let nextButton = CustomButton(viewModel: .init(type: .dark,
                                                            labelText: "Зарегистрироваться"))
     
+    let authService = AuthService()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -106,7 +107,7 @@ class InterestViewController: UIViewController {
         
         var imageString = ""
         
-        ImageService.shared.upload(image: avatar ?? UIImage()) { result in
+        ImageService.shared.upload(image: avatar ?? UIImage()) {[weak self] result in
             switch result{
             case.success(let resultImageString):
                 imageString = resultImageString
@@ -116,22 +117,15 @@ class InterestViewController: UIViewController {
                 break
             }
             
-            AuthService.shared.signUp(withEmail: email ?? "test@test.ru", withPassword: password ?? "password", image: imageString, nickname: nickname ?? "CoolBoy", description: aboutMe ?? "I am very cool artist", tags: []) { result in
+            self?.authService.signUp(withEmail: email ?? "test@test.ru", withPassword: password ?? "password", image: imageString, nickname: nickname ?? "CoolBoy", description: aboutMe ?? "I am very cool artist", tags: []) { result in
                 switch result{
                 case.success(let result):
                     NotificationCenter.default.post(name: NSNotification.Name("InterestViewController.signUp.succes.ArtDeFond"), object: nil)
-                    
                 case .failure(let error):
                     print(error)
                 }
-                
             }
-            
-            
         }
-        
-        
-        
     }
 }
 

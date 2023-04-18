@@ -49,6 +49,7 @@
 		2C69677429EEB1C10019783E /* NotificationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C69677329EEB1C10019783E /* NotificationCoordinator.swift */; };
 		2C69677629EEB1FD0019783E /* UploadPhotoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C69677529EEB1FD0019783E /* UploadPhotoCoordinator.swift */; };
 		2C69677829EEB23F0019783E /* SearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C69677729EEB23F0019783E /* SearchCoordinator.swift */; };
+		2C69677A29EEC15E0019783E /* ServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C69677929EEC15E0019783E /* ServiceError.swift */; };
 		2C81DEE528BCA84500CAB6AD /* WaterfallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C81DEE428BCA84500CAB6AD /* WaterfallViewModel.swift */; };
 		2C8C13DC28B52A4900AC3921 /* OrderAndPictureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C13DB28B52A4900AC3921 /* OrderAndPictureModel.swift */; };
 		2C8C13DE28B52A7400AC3921 /* OrdersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C13DD28B52A7400AC3921 /* OrdersTableViewCell.swift */; };
@@ -171,6 +172,7 @@
 		2C69677329EEB1C10019783E /* NotificationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCoordinator.swift; sourceTree = "<group>"; };
 		2C69677529EEB1FD0019783E /* UploadPhotoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPhotoCoordinator.swift; sourceTree = "<group>"; };
 		2C69677729EEB23F0019783E /* SearchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCoordinator.swift; sourceTree = "<group>"; };
+		2C69677929EEC15E0019783E /* ServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceError.swift; sourceTree = "<group>"; };
 		2C81DEE428BCA84500CAB6AD /* WaterfallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterfallViewModel.swift; sourceTree = "<group>"; };
 		2C8C13DB28B52A4900AC3921 /* OrderAndPictureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OrderAndPictureModel.swift; path = "ArtDeFond/Scene/Order Info Screen/View/OrderAndPictureModel.swift"; sourceTree = SOURCE_ROOT; };
 		2C8C13DD28B52A7400AC3921 /* OrdersTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersTableViewCell.swift; sourceTree = "<group>"; };
@@ -334,6 +336,7 @@
 		2C24973128B1693300551795 /* Servises */ = {
 			isa = PBXGroup;
 			children = (
+				2C69677929EEC15E0019783E /* ServiceError.swift */,
 				2C1010DA29E9B3840052367A /* MockServices */,
 				2C1010E729EA671E0052367A /* Firebase Services */,
 				2C1010E829EA68D80052367A /* PictureServiceDescription.swift */,
@@ -1062,6 +1065,7 @@
 				2C1010E629EA66A30052367A /* MockImageService.swift in Sources */,
 				2C69677829EEB23F0019783E /* SearchCoordinator.swift in Sources */,
 				2C97AFF028B2A920006CDD55 /* AddressTableViewCell.swift in Sources */,
+				2C69677A29EEC15E0019783E /* ServiceError.swift in Sources */,
 				2C97B00428B2B85D006CDD55 /* SettingsTableViewCell.swift in Sources */,
 				CEE9CCA228B4C79D00F1B4C9 /* CollectionCellSignUp.swift in Sources */,
 				2CEC274028B3EC4C0044DBD4 /* NotificationService.swift in Sources */,

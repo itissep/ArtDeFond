@@ -22,6 +22,8 @@ class PictureDetailViewModel {
  
     var refreshing = false
     
+    let authService = AuthService()
+    
     var didUpdate: (() -> Void)?
     
     required init(with pictureId: String){
@@ -32,7 +34,7 @@ class PictureDetailViewModel {
     func loadPicture(completion: @escaping (PictureWithAuthorModel?) -> Void) {
         
         
-        PictureService.shared.getPictureWithId(with: pictureId) { [weak self] result in
+        PictureService().getPictureWithId(with: pictureId) { [weak self] result in
             guard let self = self else {
                 completion(nil)
                 return
@@ -52,7 +54,7 @@ class PictureDetailViewModel {
     }
     
     func loadUser(for picture: Picture, completion: @escaping (User?) -> Void) {
-        AuthService.shared.getUserInformation(for: picture.author_id) { result in
+        authService.getUserInformation(for: picture.author_id) { result in
             switch result {
             case .success(let user):
                 completion(user)
