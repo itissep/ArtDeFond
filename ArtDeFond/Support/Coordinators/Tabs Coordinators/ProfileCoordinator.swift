@@ -18,18 +18,22 @@ protocol ProfileCoordinatorDescription: Coordinator {
     func showDeleteAccountAlert()
     
     func goToOrdersScreen(with type: SettingType)
+    func showOrderDetails(with id: String)
 }
 
 class ProfileCoordinator: ProfileCoordinatorDescription {
-    
     var parentCoordinator: Coordinator?
     var children: [Coordinator] = []
     var navigationController: UINavigationController
+    
+    private var ordersListVC: UINavigationController?
 
     var container: Container?
     private var authService: AuthServiceDescription?
     private var pictureService: PictureServiceDescription?
+    private var orderService: OrderServiceDescription?
 
+    
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
@@ -37,6 +41,7 @@ class ProfileCoordinator: ProfileCoordinatorDescription {
     func start() {
         authService = container?.resolve(AuthServiceDescription.self)
         pictureService = container?.resolve(PictureServiceDescription.self)
+        orderService = container?.resolve(OrderServiceDescription.self)
         
         goToProfile()
     }
@@ -103,10 +108,23 @@ class ProfileCoordinator: ProfileCoordinatorDescription {
     }
     
     func goToOrdersScreen(with type: SettingType) {
+        guard let orderService, let pictureService else { return }
         let orderType: OrderType = type == .purchases ? .purchases : .sales
-        let vc = OrdersViewController(type: orderType)
-        vc.modalPresentationStyle = .fullScreen
-        navigationController.visibleViewController?.present(vc, animated: true)
+        let viewModel = OrdersViewModel(for: orderType,
+                                        orderService: orderService,
+                                        pictureService: pictureService,
+                                        coordinator: self)
+        let ordersVC = OrdersViewController(viewModel: viewModel)
+        ordersListVC = UINavigationController(rootViewController: ordersVC)
+        guard let ordersListVC else { return }
+        ordersListVC.modalPresentationStyle = .fullScreen
+        navigationController.visibleViewController?.present(ordersListVC, animated: true)
+    }
+    
+    func showOrderDetails(with id: String) {
+        guard let ordersListVC else { return }
+        let viewModel = OrderDetailViewModel(with: id)
+        let orderDetailsVC = OrderDetailsViewController(viewModel: viewModel)
+        ordersListVC.pushViewController(orderDetailsVC, animated: true)
     }
 }
-

@@ -27,10 +27,10 @@ class NotificationsCoordinator: NotificationsCoordinatorDescription {
     private var notificationService: NotificationServiceDescription?
     private var authService: AuthServiceDescription?
     
+    
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
-
     
     func start() {
         pictureService = container?.resolve(PictureServiceDescription.self)

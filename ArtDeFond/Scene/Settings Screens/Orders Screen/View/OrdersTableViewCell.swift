@@ -30,7 +30,6 @@ class OrdersTableViewCell: UITableViewCell{
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "Street label"
         label.numberOfLines = 0
         label.textColor = Constants.Colors.darkRed
         label.font = Constants.Fonts.semibold17
@@ -43,7 +42,6 @@ class OrdersTableViewCell: UITableViewCell{
     lazy var statusLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "City label"
         label.numberOfLines = 0
         label.textColor = Constants.Colors.black
         label.font = Constants.Fonts.regular15
@@ -55,7 +53,6 @@ class OrdersTableViewCell: UITableViewCell{
     lazy var timeLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "Postal label"
         label.numberOfLines = 1
         label.textColor = Constants.Colors.pink
         label.font = Constants.Fonts.regular15
@@ -63,9 +60,6 @@ class OrdersTableViewCell: UITableViewCell{
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-   
-
-    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -74,10 +68,6 @@ class OrdersTableViewCell: UITableViewCell{
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
-    
-    
-    
-    
     
     func configure(model: OrderAndPictureModel
  ) {
@@ -117,13 +107,9 @@ class OrdersTableViewCell: UITableViewCell{
     
     
     private func layout(){
-        var imageView : UIImageView
-        imageView  = UIImageView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
-        imageView.image = UIImage(named:"Disclosure Indicator")
-        self.accessoryView = imageView
+        self.accessoryType = .detailDisclosureButton
         
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
-        
         
         contentView.addSubview(image)
         image.snp.makeConstraints { make in
@@ -132,7 +118,6 @@ class OrdersTableViewCell: UITableViewCell{
             make.top.equalToSuperview().offset(3)
             make.leading.equalToSuperview()
         }
-
 
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
@@ -161,11 +146,6 @@ class OrdersTableViewCell: UITableViewCell{
     override func prepareForReuse() {
         super.prepareForReuse()
         self.image.image = nil
-    }
-    
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        
     }
 }
 

@@ -13,6 +13,7 @@ final class OrderService: OrderServiceDescription {
     private let database = Firestore.firestore()
     static let shared: OrderServiceDescription = OrderService()
     
+    #warning("TODO: get from elsewhere")
     let authService = AuthService()
     
     init() {}
@@ -41,7 +42,6 @@ final class OrderService: OrderServiceDescription {
         guard let user_id = authService.userID() else {
             return
         }
-        
         
         switch type {
         case .common:
@@ -86,13 +86,10 @@ final class OrderService: OrderServiceDescription {
         }
     }
     
-    
     func updateOrderStatus(for order_id: String, to newStatus: OrderStatus, completion: @escaping (Result<Order, Error>) -> Void) {
         let rawStatus = newStatus.rawValue
         database.collection("orders").document(order_id).updateData(["status" : rawStatus])
     }
-    
-    
 }
 
 extension OrderService {
@@ -119,7 +116,6 @@ extension OrderService {
 }
 
 
-
 struct Order: Codable {
     var id: String
     var picture_id: String // picture
@@ -140,8 +136,8 @@ enum OrderStatus: String, Codable {
 }
 
 
-enum OrderType {
-    case common
-    case purchases // mine
-    case sales // not mine
+enum OrderType: String {
+    case common = "Заказы"
+    case purchases = "Мои покупки"
+    case sales = "Мои продажи"
 }

@@ -57,6 +57,7 @@ class SettingsTableCell: UITableViewCell{
     
     private func layout(){
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
+        self.selectionStyle = .none
         
         contentView.addSubview(image)
         image.snp.makeConstraints { make in

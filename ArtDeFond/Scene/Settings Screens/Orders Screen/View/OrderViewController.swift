@@ -5,16 +5,11 @@
 //  Created by Someone on 21.08.2022.
 //
 import UIKit
-import FirebaseAuth
 import SnapKit
-
+import Combine
 
 class OrdersViewController: UIViewController {
-    
-    private var viewModel: OrdersViewModel!
-    private var type: OrderType
-    
-    lazy var tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
         
         tableView.register(OrdersTableViewCell.self, forCellReuseIdentifier: OrdersTableViewCell.reusableId)
@@ -28,9 +23,13 @@ class OrdersViewController: UIViewController {
         return tableView
     }()
     
+    private var viewModel: OrdersViewModel
+    private var subscriptions = Set<AnyCancellable>()
     
-    init(type: OrderType) {
-        self.type = type
+    // MARK: - Life Cycle
+    
+    init(viewModel: OrdersViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -41,42 +40,26 @@ class OrdersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableViewSetup()
-        
-//        viewModel.fetchOrders(type: type) {
-//            self.tableView.reloadData()
-//        }
-        callToViewModelForUIUpdate()
+        bindingSetup()
     }
     
-    func callToViewModelForUIUpdate(){
-        
-        self.viewModel =  OrdersViewModel(for: type)
-        self.viewModel.bindOrdersViewModelToController = {
-            self.updateDataSource()
-        }
+    // MARK: - ViewModel binding
+    
+    func bindingSetup(){
+        viewModel.$orders
+            .sink {[weak self] _ in
+                self?.tableView.reloadData()
+            }
+            .store(in: &subscriptions)
     }
     
-    func updateDataSource(){
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-        
-    }
+    // MARK: - UI setup
     
     private func tableViewSetup(){
-        switch type {
-        case .common:
-            title = "Заказы"
-        case .purchases:
-            title = "Мои покупки"
-        case .sales:
-            title = "Мои продажи"
-        }
+        title = viewModel.getTitle()
         navigationController?.navigationBar.titleTextAttributes = Constants.Unspecified.titleAttributes
         
-        let backImage = UIImage(named: "Back arrow")
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: backImage, style: .plain, target: self, action: #selector(backTapped))
-        
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Закрыть", style: .plain, target: self, action: #selector(backButtonTapped))
         
         view.backgroundColor = .white
         
@@ -87,20 +70,23 @@ class OrdersViewController: UIViewController {
         
         tableView.snp.makeConstraints { make in
             make.top.equalTo(view).offset(10)
-            make.leading.trailing.equalToSuperview().inset(25)
+            make.leading.equalToSuperview().offset(25)
+            make.trailing.equalToSuperview()
             make.bottom.equalTo(view).offset(10)
         }
     }
     
+    // MARK: - Selectors
+    
     @objc
-    func backTapped(){
+    func backButtonTapped(){
         self.dismiss(animated: true)
     }
 }
 
+// MARK: - UITableViewDelegate
 
 extension OrdersViewController: UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as? OrdersTableViewCell
         
@@ -110,11 +96,11 @@ extension OrdersViewController: UITableViewDelegate {
         else {
             return
         }
-        navigationController?.present(OrderDetailsViewController(viewModel: OrderDetailViewModel(with: orderId)), animated: true)
+        viewModel.toOrderDetails(with: orderId)
     }
 }
 
-
+// MARK: - UITableViewDataSource
 
 extension OrdersViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

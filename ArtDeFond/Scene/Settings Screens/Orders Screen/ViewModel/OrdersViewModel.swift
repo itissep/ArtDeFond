@@ -7,39 +7,45 @@
 
 import Foundation
 
-class OrdersViewModel {
+class OrdersViewModel: NSObject {
+    @Published var orders: [OrderAndPictureModel] = []
     
-    let type: OrderType
-    var refreshing = false
+    private let orderService: OrderServiceDescription
+    private let pictureService: PictureServiceDescription
+    private let coordinator: ProfileCoordinatorDescription
+    private let type: OrderType
     
-    private(set) var orders: [OrderAndPictureModel] = [] {
-            didSet {
-                self.bindOrdersViewModelToController()
-            }
-        }
-    
-    var bindOrdersViewModelToController : (() -> ()) = {}
-    
-    required init(for type: OrderType) {
+    required init(
+        for type: OrderType,
+        orderService: OrderServiceDescription,
+        pictureService: PictureServiceDescription,
+        coordinator: ProfileCoordinatorDescription
+    ) {
+        self.orderService = orderService
+        self.pictureService = pictureService
+        self.coordinator = coordinator
         self.type = type
-            fetchData()
-        }
-    
-    
-    func fetchData(){
-        refreshing = true
+        super.init()
         
-        loadOrders { orders in
-            self.refreshing = false
-            self.orders = orders
+        fetchData()
+    }
+    
+    func getTitle() -> String {
+        return type.rawValue
+    }
+    
+    func toOrderDetails(with id: String) {
+        coordinator.showOrderDetails(with: id)
+    }
+    
+    private func fetchData(){
+        loadOrders {[weak self] orders in
+            self?.orders = orders
         }
     }
     
-    
-    func loadOrders(completion: @escaping ([OrderAndPictureModel]) -> Void) {
-        
-        OrderService.shared.loadOrders(type: type) { [weak self] result in
-            
+    private func loadOrders(completion: @escaping ([OrderAndPictureModel]) -> Void) {
+        orderService.loadOrders(type: type) { [weak self] result in
             guard let self = self else {
                 completion([])
                 return
@@ -67,11 +73,10 @@ class OrdersViewModel {
                 }
             }
         }
-        
     }
     
-    func loadPicture(for order: Order, completion: @escaping (Picture?) -> Void) {
-        PictureService().getPictureWithId(with: order.picture_id) { result in
+    private func loadPicture(for order: Order, completion: @escaping (Picture?) -> Void) {
+        pictureService.getPictureWithId(with: order.picture_id) { result in
             switch result {
             case .failure( _):
                 completion(nil)
