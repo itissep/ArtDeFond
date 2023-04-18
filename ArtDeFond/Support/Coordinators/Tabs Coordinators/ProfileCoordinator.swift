@@ -13,9 +13,15 @@ protocol ProfileCoordinatorDescription: Coordinator {
     func showSettings()
     func showPictureDetail(with id: String)
     func goToAddresses()
+    
+    func showSignOutAlert()
+    func showDeleteAccountAlert()
+    
+    func goToOrdersScreen(with type: SettingType)
 }
 
 class ProfileCoordinator: ProfileCoordinatorDescription {
+    
     var parentCoordinator: Coordinator?
     var children: [Coordinator] = []
     var navigationController: UINavigationController
@@ -53,7 +59,8 @@ class ProfileCoordinator: ProfileCoordinatorDescription {
     }
     
     func showSettings() {
-        let settingsViewController = UserSettingsViewController()
+        let viewModel = SettingsViewModel(coordinator: self)
+        let settingsViewController = UserSettingsViewController(viewModel: viewModel)
         if let sheet = settingsViewController.sheetPresentationController {
             sheet.detents = [.medium()]
             sheet.prefersGrabberVisible = true
@@ -63,7 +70,43 @@ class ProfileCoordinator: ProfileCoordinatorDescription {
     }
     
     func goToAddresses() {
-        //
+        let viewModel = AddressesViewModel()
+        let addressesVC = AddressesViewController(viewModel: viewModel)
+        addressesVC.modalPresentationStyle = .fullScreen
+        navigationController.visibleViewController?.present(addressesVC, animated: true)
+    }
+    
+    func showSignOutAlert() {
+        let alert = UIAlertController.createAlert(
+            withTitle: "Хотите выйти из профиля?",
+            message: "Вы всегда можете к нам вернуться!",
+            buttonString: "Выйти") {[weak self] _ in
+                #warning("TODO: sign out logic")
+//                self?.authService.signOut { _ in
+//                     // выкинуть на ленту и обновить вкладку профиля
+//                    }
+                }
+        navigationController.visibleViewController?.present(alert, animated: true, completion: nil)
+    }
+    
+    func showDeleteAccountAlert() {
+        let alert = UIAlertController.createAlert(
+            withTitle: "Хотите удалить профиль?",
+            message: "Это дейстивие нельзя отменить. Вы покинете нас безвозвратно!",
+            buttonString: "Удалить") {[weak self] _ in
+                #warning("TODO: delete alert logic")
+//                self?.authService.deleteAccount { _ in
+//                    // выкинуть на ленту и обновить вкладку профиля
+//                }
+            }
+        navigationController.visibleViewController?.present(alert, animated: true, completion: nil)
+    }
+    
+    func goToOrdersScreen(with type: SettingType) {
+        let orderType: OrderType = type == .purchases ? .purchases : .sales
+        let vc = OrdersViewController(type: orderType)
+        vc.modalPresentationStyle = .fullScreen
+        navigationController.visibleViewController?.present(vc, animated: true)
     }
 }
 

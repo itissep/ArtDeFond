@@ -29,7 +29,6 @@ class SettingsTableCell: UITableViewCell{
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "Street label"
         label.numberOfLines = 0
         label.textColor = Constants.Colors.darkRed
         label.font = Constants.Fonts.semibold17
@@ -47,15 +46,11 @@ class SettingsTableCell: UITableViewCell{
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
     
-    func configure(model: SettingsModel
- ) {
-        
+    func configure(model: SettingsModel) {
         self.settingsModel = model
-//        self.image
         self.titleLabel.text = model.title
         self.image.image = model.image?.withTintColor(Constants.Colors.darkRed, renderingMode: .alwaysOriginal)
 
-    
         layout()
     }
     
@@ -70,31 +65,12 @@ class SettingsTableCell: UITableViewCell{
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview()
         }
-
-
-//
+        
         contentView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalTo(image.snp.trailing).offset(18)
             make.trailing.equalToSuperview()
         }
-        
-
-    }
-    
-    
-    override func prepareForReuse() {
-//        super.prepareForReuse()
-//        self.titleLabel.text = nil
-//        self.coverImageView.image = nil
-    }
-    
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        
     }
 }
-
-
-
