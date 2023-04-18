@@ -81,10 +81,7 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout {
     }
     
     func presentPictureDetails(with id: String) {
-        viewModel.configurePictureDetailsViewModel(with: id) {[weak self] viewModel in
-            let pictureVC = PictureDetailViewController(viewModel: viewModel)
-            self?.present(pictureVC, animated: true)
-        }
+        viewModel.showPictureDetails(with: id)
     }
     
     // MARK: - UI Setup

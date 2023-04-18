@@ -15,11 +15,15 @@ class FeedViewModel: NSObject {
     
     private let pictureService: PictureServiceDescription
     private let authService: AuthServiceDescription
+    private let coordinator: FeedCoordinatorDescription
     
     init(pictureService: PictureServiceDescription,
-         authService: AuthServiceDescription) {
+         authService: AuthServiceDescription,
+         coordinator: FeedCoordinatorDescription
+    ) {
         self.pictureService = pictureService
         self.authService = authService
+        self.coordinator = coordinator
         super.init()
         fetchData()
     }
@@ -30,9 +34,8 @@ class FeedViewModel: NSObject {
         fetchData()
     }
     
-    func configurePictureDetailsViewModel(with id: String, _ completion: @escaping (PictureDetailViewModel) -> Void) {
-        let pictureDetailsViewModel = PictureDetailViewModel(with: id, pictureService: pictureService, authService: authService)
-        completion(pictureDetailsViewModel)
+    func showPictureDetails(with id: String) {
+        coordinator.showPictureDetails(with: id)
     }
     
     // MARK: - Private methods
