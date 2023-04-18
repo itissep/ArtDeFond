@@ -327,7 +327,7 @@ extension ProfileViewController: UICollectionViewDelegate {
             let cell = cell,
             let auctionId = cell.auctionModel?.id
         else { return }
-        present(PictureDetailViewController(viewModel: PictureDetailViewModel(with: auctionId)), animated: true)
+//        present(PictureDetailViewController(viewModel: PictureDetailViewModel(with: auctionId)), animated: true)
     }
 }
 
@@ -352,7 +352,7 @@ extension ProfileViewController: UITableViewDelegate {
             let cell = cell,
             let pictureId = cell.pictureModel?.id
         else { return }
-        present(PictureDetailViewController(viewModel: PictureDetailViewModel(with: pictureId)), animated: true)
+//        present(PictureDetailViewController(viewModel: PictureDetailViewModel(with: pictureId)), animated: true)
     }
 }
 

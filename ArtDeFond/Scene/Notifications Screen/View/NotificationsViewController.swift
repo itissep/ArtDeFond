@@ -102,7 +102,7 @@ extension NotificationsViewController: UITableViewDelegate {
             present(OrderDetailsViewController(viewModel: OrderDetailViewModel(with: orderId)), animated: true)
         case .yourPictureWasBetOn, .yourBetWasBeaten:
             if let pictureId = cellModel.picture?.id {
-                present(PictureDetailViewController(viewModel: PictureDetailViewModel(with: pictureId)), animated: true)
+//                present(PictureDetailViewController(viewModel: PictureDetailViewModel(with: pictureId)), animated: true)
             }
         }
     }

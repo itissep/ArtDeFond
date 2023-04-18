@@ -6,19 +6,15 @@
 //
 
 import UIKit
-import SwiftUI
+import Combine
 
 class PictureDetailViewController: UIViewController {
-    
-    private var viewModel: PictureDetailViewModel!
-
-    let headerHeight: CGFloat = 250 // 210
+    private let headerHeight: CGFloat = 250 // 210
 
     private var headerTopConstraint: NSLayoutConstraint!
     private var headerHeightConstraint: NSLayoutConstraint!
     
-    
-    lazy var pictureImageView: UIImageView = {
+    private lazy var pictureImageView: UIImageView = {
         let imageView = UIImageView()
         
         imageView.contentMode = .scaleAspectFill
@@ -28,8 +24,7 @@ class PictureDetailViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    
-    lazy var scrollView: UIScrollView = {
+    private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         
         scrollView.delegate = self
@@ -39,32 +34,25 @@ class PictureDetailViewController: UIViewController {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
     }()
-    
-    lazy var mainContainerView: UIView = {
+    private lazy var mainContainerView: UIView = {
         let view = UIView()
         view.clipsToBounds = true
         view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    
-    lazy var categoriesLabel: UILabel = {
+    private lazy var categoriesLabel: UILabel = {
         let label = UILabel()
-        
-        label.text = "ЖИВОПИСЬ АБСТРАКЦИЯ"
-//        label.numberOfLines = 1
+
         label.textColor = Constants.Colors.gray
         label.font = Constants.Fonts.regular11
         
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        
-        label.text = " "
+    
         label.numberOfLines = 2
         label.textColor = Constants.Colors.darkRed
         label.font = Constants.Fonts.semibold20
@@ -72,12 +60,9 @@ class PictureDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    lazy var descriptionLabel: UILabel = {
+    private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        
-//        label.text = "Прекрасное описание нашей картины с красивым назнанием. Сюжет данного шедевра останется неразгаданной загадкой. Это все, что об этом можно сказать."
-        label.text = ""
+    
         label.numberOfLines = 4
         label.textColor = Constants.Colors.black
         label.font = Constants.Fonts.regular15
@@ -86,8 +71,7 @@ class PictureDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    lazy var materialTitleLabel: UILabel = {
+    private lazy var materialTitleLabel: UILabel = {
         let label = UILabel()
         
         label.text = "Материалы"
@@ -98,11 +82,9 @@ class PictureDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    lazy var materialLabel: UILabel = {
+    private lazy var materialLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "Холст и масло"
         label.numberOfLines = 1
         label.textColor = Constants.Colors.pink
         label.font = Constants.Fonts.regular15
@@ -110,9 +92,7 @@ class PictureDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    
-    lazy var sizeTitleLabel: UILabel = {
+    private lazy var sizeTitleLabel: UILabel = {
         let label = UILabel()
         
         label.text = "Размеры"
@@ -123,11 +103,9 @@ class PictureDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    lazy var sizeLabel: UILabel = {
+    private lazy var sizeLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "120см х 70см"
         label.numberOfLines = 2
         label.textColor = Constants.Colors.pink
         label.font = Constants.Fonts.regular15
@@ -135,8 +113,7 @@ class PictureDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    lazy var yearTitleLabel: UILabel = {
+    private lazy var yearTitleLabel: UILabel = {
         let label = UILabel()
         
         label.text = "Год"
@@ -147,11 +124,9 @@ class PictureDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    lazy var yearLabel: UILabel = {
+    private lazy var yearLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "2001"
         label.numberOfLines = 2
         label.textColor = Constants.Colors.pink
         label.font = Constants.Fonts.regular15
@@ -160,8 +135,7 @@ class PictureDetailViewController: UIViewController {
         return label
     }()
     
-    
-    lazy var authorImageView: UIImageView = {
+    private lazy var authorImageView: UIImageView = {
         let imageView = UIImageView()
         
         imageView.backgroundColor = .white
@@ -172,12 +146,9 @@ class PictureDetailViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    
-    
-    lazy var authorLabel: UILabel = {
+    private lazy var authorLabel: UILabel = {
         let label = UILabel()
         
-        label.text = " "
         label.numberOfLines = 1
         label.font = Constants.Fonts.semibold11
         label.textColor = Constants.Colors.gray
@@ -186,7 +157,7 @@ class PictureDetailViewController: UIViewController {
         return label
     }()
     
-    lazy var startBetLabel: UILabel = {
+    private lazy var startBetLabel: UILabel = {
         let label = UILabel()
         
         label.text = "$ 100,00"
@@ -197,9 +168,7 @@ class PictureDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    
-    lazy var startBetTitleLabel: UILabel = {
+    private lazy var startBetTitleLabel: UILabel = {
         let label = UILabel()
         
         label.text = "Начальная ставка"
@@ -210,9 +179,7 @@ class PictureDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    
-    lazy var currentAmountTitleLabel: UILabel = {
+    private lazy var currentAmountTitleLabel: UILabel = {
         let label = UILabel()
         
         label.text = "Цена"
@@ -223,12 +190,9 @@ class PictureDetailViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    
-    lazy var currentAmountLabel: UILabel = {
+    private lazy var currentAmountLabel: UILabel = {
         let label = UILabel()
-        
-        label.text = " "
+    
         label.numberOfLines = 1
         label.font = Constants.Fonts.medium17
         label.textColor = Constants.Colors.darkRed
@@ -237,8 +201,7 @@ class PictureDetailViewController: UIViewController {
         return label
     }()
     
-    
-    lazy var arBtn: UIButton = {
+    private lazy var arBtn: UIButton = {
         let button = UIButton()
         button.tintColor = Constants.Colors.darkRed
         let config = UIImage.SymbolConfiguration(
@@ -252,32 +215,7 @@ class PictureDetailViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
-    @objc func arBtnPressed(){
-        guard let picture = viewModel.picture?.picture else {
-            return
-        }
-        
-        ImageService.shared.image(with: picture.image) {[weak self] result in
-            switch result {
-            case .failure(let error):
-                let alert = UIAlertController(title: "Уууупс", message: error.localizedDescription, preferredStyle: .alert)
-                let alertAction = UIAlertAction(title: "Ok", style: .cancel)
-                alert.addAction(alertAction)
-                self?.present(alert, animated: true)
-            case .success(let image):
-                let navVC = UINavigationController()
-                let arKitVC = ARKitViewController(image: image, width: Double(picture.width), height: Double(picture.height))
-                arKitVC.imageToShow = image
-                navVC.pushViewController(arKitVC, animated: true)
-                self?.present(navVC, animated: true)
-            }
-        }
-    }
-
-    
-    
-    lazy var backBtn: UIButton = {
+    private lazy var backBtn: UIButton = {
         let button = UIButton()
         button.tintColor = Constants.Colors.darkRed
 
@@ -290,30 +228,9 @@ class PictureDetailViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    
-    @objc func backBtnPressed(){
-        self.dismiss(animated: true)
-    }
 
-    private func makeLine() -> UIView {
-        let view = UIView()
-        view.backgroundColor = Constants.Colors.pink
-        
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }
-
-    
-    private func makeStackView(l1: UILabel, l2:UILabel) -> UIStackView{
-        let sv = UIStackView(arrangedSubviews: [l1, l2])
-        sv.axis = .horizontal
-        sv.spacing = 5
-        sv.distribution = .equalSpacing
-        
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
-    }
-    
+    private var viewModel: PictureDetailViewModel
+    private var subscriptions = Set<AnyCancellable>()
     
     init(viewModel: PictureDetailViewModel) {
         self.viewModel = viewModel
@@ -329,22 +246,21 @@ class PictureDetailViewController: UIViewController {
         super.viewDidLoad()
 
         layout()
-        callToViewModelForUIUpdate()
+        bindingSetup()
         
     }
     
-    func callToViewModelForUIUpdate(){
-        self.viewModel.bindFeedViewModelToController = {
-            self.configurePictureInfo()
-        }
+    private func bindingSetup(){
+        viewModel.$picture
+            .sink {[weak self] pictureModel in
+                self?.configurePictureInfo(with: pictureModel)
+            }
+            .store(in: &subscriptions)
     }
     
     
-    func configurePictureInfo(){
-        
-        guard let model = viewModel.picture else {
-            return
-        }
+    func configurePictureInfo(with model: PictureWithAuthorModel?){
+        guard let model else { return }
         ImageService.shared.image(with: model.picture.image) { [weak self] result in
             switch result {
             case .success(let image):
@@ -390,8 +306,26 @@ class PictureDetailViewController: UIViewController {
         
         currentAmountLabel.fadeTransition(0.4)
         currentAmountLabel.text = model.picture.price.toRubles()
+    }
+    
+    // MARK: - Layout
+    
+    private func makeLine() -> UIView {
+        let view = UIView()
+        view.backgroundColor = Constants.Colors.pink
         
-        // bet configuration
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }
+
+    private func makeStackView(l1: UILabel, l2:UILabel) -> UIStackView{
+        let sv = UIStackView(arrangedSubviews: [l1, l2])
+        sv.axis = .horizontal
+        sv.spacing = 5
+        sv.distribution = .equalSpacing
+        
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        return sv
     }
     
     private func layout() {
@@ -561,21 +495,46 @@ class PictureDetailViewController: UIViewController {
             make.trailing.equalToSuperview().inset(27)
         }
     }
+    
+    // MARK: - Selectors
+    
+    @objc func arBtnPressed(){
+        guard let picture = viewModel.picture?.picture else {
+            return
+        }
+        
+        ImageService.shared.image(with: picture.image) {[weak self] result in
+            switch result {
+            case .failure(let error):
+                let alert = UIAlertController(title: "Уууупс", message: error.localizedDescription, preferredStyle: .alert)
+                let alertAction = UIAlertAction(title: "Ok", style: .cancel)
+                alert.addAction(alertAction)
+                self?.present(alert, animated: true)
+            case .success(let image):
+                let navVC = UINavigationController()
+                let arKitVC = ARKitViewController(image: image, width: Double(picture.width), height: Double(picture.height))
+                arKitVC.imageToShow = image
+                navVC.pushViewController(arKitVC, animated: true)
+                self?.present(navVC, animated: true)
+            }
+        }
+    }
+    
+    @objc func backBtnPressed(){
+        self.dismiss(animated: true)
+    }
 }
 
 
 extension PictureDetailViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
             if scrollView.contentOffset.y < 0.0 {
-                // Scrolling down: Scale
                 headerHeightConstraint?.constant =
                     headerHeight - scrollView.contentOffset.y
-                
-                if (scrollView.contentOffset.y < -210){
-                   // 
-                }
+//                if (scrollView.contentOffset.y < -210){
+//
+//                }
             } else {
-                // Scrolling up: Parallax
                 let parallaxFactor: CGFloat = 0.25
                 let offsetY = scrollView.contentOffset.y * parallaxFactor
                 let minOffsetY: CGFloat = 8.0

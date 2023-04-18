@@ -80,6 +80,13 @@ class FeedViewController: UIViewController, UICollectionViewDelegateFlowLayout {
         }
     }
     
+    func presentPictureDetails(with id: String) {
+        viewModel.configurePictureDetailsViewModel(with: id) {[weak self] viewModel in
+            let pictureVC = PictureDetailViewController(viewModel: viewModel)
+            self?.present(pictureVC, animated: true)
+        }
+    }
+    
     // MARK: - UI Setup
     
     private func setup(){
@@ -143,14 +150,13 @@ extension FeedViewController: UICollectionViewDelegate {
             let cell = cell,
             let auctionId = cell.auctionModel?.id
         else { return }
-        viewModel.goToPicture(with: auctionId)
+        presentPictureDetails(with: auctionId)
     }
 }
 
 //MARK: - UICollectionViewDataSource
 extension FeedViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(viewModel.auctions.count)
         return viewModel.auctions.count
     }
     
@@ -172,7 +178,7 @@ extension FeedViewController: UITableViewDelegate {
         else {
             return
         }
-        viewModel.goToPicture(with: pictureId)
+        presentPictureDetails(with: pictureId)
     }
 }
 

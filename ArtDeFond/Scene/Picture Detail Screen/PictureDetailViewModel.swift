@@ -6,35 +6,30 @@
 //
 
 import Foundation
-
+import Combine
 
 class PictureDetailViewModel {
-    
-    var pictureId: String
 
-    private(set) var picture: PictureWithAuthorModel? {
-        didSet {
-            self.bindFeedViewModelToController()
-        }
-    }
-    
-    var bindFeedViewModelToController : (() -> ()) = {}
- 
+    @Published var picture: PictureWithAuthorModel?
     var refreshing = false
     
-    let authService = AuthService()
+    private let authService: AuthServiceDescription
+    private let pictureService: PictureServiceDescription
+    private let pictureId: String
     
-    var didUpdate: (() -> Void)?
-    
-    required init(with pictureId: String){
+    required init(with pictureId: String,
+                  pictureService: PictureServiceDescription,
+                  authService: AuthServiceDescription
+    ){
         self.pictureId = pictureId
+        self.authService = authService
+        self.pictureService = pictureService
         fetchData()
     }
     
     func loadPicture(completion: @escaping (PictureWithAuthorModel?) -> Void) {
         
-        
-        PictureService().getPictureWithId(with: pictureId) { [weak self] result in
+        pictureService.getPictureWithId(with: pictureId) { [weak self] result in
             guard let self = self else {
                 completion(nil)
                 return
@@ -66,12 +61,9 @@ class PictureDetailViewModel {
     
     func fetchData() {
         refreshing = true
-        
-        loadPicture { pictureModel in
-            self.refreshing = false
-            self.picture = pictureModel
-            
+        loadPicture {[weak self] pictureModel in
+            self?.refreshing = false
+            self?.picture = pictureModel
         }
     }
 }
-

@@ -126,7 +126,7 @@ class WaterfallViewController: UIViewController, UICollectionViewDelegate, UICol
             return
         }
         
-        present(PictureDetailViewController(viewModel: .init(with: id)), animated: true)
+//        present(PictureDetailViewController(viewModel: .init(with: id)), animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
