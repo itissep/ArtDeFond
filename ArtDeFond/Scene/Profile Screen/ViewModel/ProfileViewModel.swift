@@ -6,117 +6,97 @@
 //
 
 import Foundation
+import Combine
 
+class ProfileViewModel: NSObject {
+    var auctions : [CircleFeedAuctionModel] = []
+    var pictures : [Picture] = []
+    var user : User?
 
-class ProfileViewModel {
-
-    let userId = AuthService().userID()
+    @Published var refreshing = false
     
-    private(set) var auctions : [CircleFeedAuctionModel] = [] {
-            didSet {
-                self.bindProfileViewModelToController()
-            }
-        }
+    private let authService: AuthServiceDescription
+    private let pictureService: PictureServiceDescription
+    private let coordinator: ProfileCoordinatorDescription
     
-    private(set) var pictures : [Picture] = [] {
-            didSet {
-                self.bindProfileViewModelToController()
-            }
-        }
-    private(set) var user : User? {
-            didSet {
-                self.bindProfileViewModelToController()
-            }
-        }
-
-    var bindProfileViewModelToController : (() -> ()) = {}
-    var refreshing = false
+    private let group = DispatchGroup()
     
-    
-    init() {
+    init(
+        authService: AuthServiceDescription,
+        pictureService: PictureServiceDescription,
+        coordinator: ProfileCoordinatorDescription
+    ) {
+        self.authService = authService
+        self.pictureService = pictureService
+        self.coordinator = coordinator
+        super.init()
         fetchData()
     }
     
-    func fetchData(){
+    func showSettings() {
+        coordinator.showSettings()
+    }
+    
+    func showPictrueDetails(with id: String) {
+        coordinator.showPictureDetail(with: id)
+    }
+    
+    private func fetchData() {
         refreshing = true
         
-        let group = DispatchGroup()
+        guard let userId = authService.userID() else { return }
         
-        var outputPictures: [Picture] = []
-        var outputAuctions: [CircleFeedAuctionModel] = []
-        var outputUser: User? = nil
+        loadPictures(for: userId)
+        loadUser(for: userId)
+        loadAuctions(for: userId)
         
-        guard let userId = userId else {
-            return
-        }
-        
-        group.enter()
-        loadPictures(for: userId) { pictures in
-            outputPictures = pictures
-            group.leave()
-        }
-        group.enter()
-        loadUser(for: userId) { user in
-            outputUser = user
-            group.leave()
-        }
-        group.enter()
-        loadAuctions(for: userId) { auctions in
-            outputAuctions = auctions
-            group.leave()
-        }
-        
-        group.notify(queue: .main) {
-            self.refreshing = false
-            self.user = outputUser
-            self.pictures = outputPictures
-            self.auctions = outputAuctions
+        group.notify(queue: .main) {[weak self] in
+            self?.refreshing = false
         }
     }
     
-    
-    func loadPictures(for userId: String, completion: @escaping ([Picture]) -> Void){
-        PictureService().loadPictureInformation(type: .authorsPictures(id: userId)) { result in
+    private func loadPictures(for userId: String){
+        group.enter()
+        pictureService.loadPictureInformation(type: .authorsPictures(id: userId)) {[weak self] result in
             switch result {
             case .failure( _):
-                completion([])
+                self?.pictures = []
             case .success(let pictures):
-                completion(pictures)
+                self?.pictures = pictures
             }
+            self?.group.leave()
         }
     }
     
-    func loadAuctions(for userId: String, completion: @escaping ([CircleFeedAuctionModel]) -> Void){
-        PictureService().loadPictureInformation(type: .authorsAuctions(id: userId)) { result in
+    private func loadAuctions(for userId: String){
+        group.enter()
+        pictureService.loadPictureInformation(type: .authorsAuctions(id: userId)) {[weak self] result in
             switch result {
             case .failure( _):
-                completion([])
+                self?.auctions = []
+                
             case .success(let auctions):
                 var outputAuctions = [CircleFeedAuctionModel]()
                 auctions.forEach { auction in
                     let newAuction = CircleFeedAuctionModel(id: auction.id, image: auction.image)
                     outputAuctions.append(newAuction)
                 }
-                completion(outputAuctions)
+                self?.auctions = outputAuctions
             }
+            self?.group.leave()
         }
     }
     
-    func loadUser(for userId: String, completion: @escaping (User?) -> Void){
-        AuthService().getUserInformation(for: userId) { result in
+    private func loadUser(for userId: String){
+        group.enter()
+        authService.getUserInformation(for: userId) {[weak self] result in
             switch result {
             case .failure( _):
-                completion(nil)
+                break
             case .success(let user):
-                completion(user)
+                self?.user = user
             }
+            self?.group.leave()
         }
     }
-}
-
-
-struct UserPicturesAuctionsModel {
-    let pictures: [Picture]
-    var auctions: [CircleFeedAuctionModel]? = nil
-    var user: User? = nil
 }

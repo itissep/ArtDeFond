@@ -7,20 +7,17 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 
 class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayout {
-    
-    private var viewModel: ProfileViewModel!
-    
-    lazy var tableHeaderView: UIView = {
+    private lazy var tableHeaderView: UIView = {
         let view = UIView()
         
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    lazy var tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let tableView = UITableView()
         
         tableView.register(ProfilePicturesTableCell.self, forCellReuseIdentifier: ProfilePicturesTableCell.reusableId)
@@ -33,9 +30,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
-    
-    lazy var collectionView: UICollectionView = {
-        
+    private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: 64, height: 64)
@@ -49,8 +44,9 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
         return collectionView
     }()
     
-    lazy var balanceView: UIView = {
+    private lazy var balanceView: UIView = {
         let view = UIView()
+        
         view.backgroundColor = Constants.Colors.pink
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
@@ -58,9 +54,9 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    lazy var userImageView: UIImageView = {
+    private lazy var userImageView: UIImageView = {
         let view = UIImageView()
+        
         view.backgroundColor = .white
         view.layer.cornerRadius = 32
         view.layer.masksToBounds = true
@@ -70,7 +66,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
         return view
     }()
     
-    lazy var balanceDescriptionLabel: UILabel = {
+    private lazy var balanceDescriptionLabel: UILabel = {
         let label = UILabel()
         
         label.text = "Текущий баланс"
@@ -81,11 +77,9 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    lazy var balanceAmountLabel: UILabel = {
+    private lazy var balanceAmountLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "₽1.01"
         label.numberOfLines = 1
         label.textColor = .white
         label.font = Constants.Fonts.bold30
@@ -93,12 +87,9 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    
-    lazy var nicknameLabel: UILabel = {
+    private lazy var nicknameLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "SOMEONE"
         label.numberOfLines = 1
         label.textColor = Constants.Colors.darkRed
         label.font = Constants.Fonts.semibold20
@@ -106,11 +97,9 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    lazy var descriptionLabel: UILabel = {
+    private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         
-        label.text = ""
         label.numberOfLines = 0
         label.textColor = Constants.Colors.darkRed
         label.font = Constants.Fonts.regular15
@@ -118,8 +107,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    lazy var auctionsTitleLabel: UILabel = {
+    private lazy var auctionsTitleLabel: UILabel = {
         let label = UILabel()
         
         label.text = "Активные аукционы"
@@ -130,8 +118,7 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    lazy var picturesTitleLabel: UILabel = {
+    private lazy var picturesTitleLabel: UILabel = {
         let label = UILabel()
         
         label.text = "Мои картины"
@@ -144,35 +131,10 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
         return label
     }()
     
+    private var viewModel: ProfileViewModel
+    private var subscriptions = Set<AnyCancellable>()
     
-//MARK: - viewDidLoad
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        
-        title = "Профиль"
-        navigationController?.navigationBar.titleTextAttributes = Constants.Unspecified.titleAttributes
-
-        setup()
-        callToViewModelForUIUpdate()
-        
-       
-    }
-    
-    func callToViewModelForUIUpdate(){
-        self.viewModel.bindProfileViewModelToController = {
-            self.updateDataSource()
-        }
-    }
-    
-    func updateDataSource(){
-        DispatchQueue.main.async {
-            self.configureUser()
-            self.tableView.reloadData()
-            self.collectionView.reloadData()
-        }
-        
-    }
+    // MARK: - Life Cycle
     
     init(viewModel: ProfileViewModel) {
         self.viewModel = viewModel
@@ -183,12 +145,39 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        layout()
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
+        title = "Профиль"
+        navigationController?.navigationBar.titleTextAttributes = Constants.Unspecified.titleAttributes
+
+        setup()
+        bindingSetup()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        layout()
+    }
+    
+    // MARK: - ViewModel binding
+    
+    private func bindingSetup(){
+        viewModel.$refreshing
+            .sink {[weak self] isRefreshing in
+                self?.updateDataSource()
+            }
+            .store(in: &subscriptions)
+    }
+    
+    private func updateDataSource(){
+        DispatchQueue.main.async {
+            self.configureUser()
+            self.tableView.reloadData()
+            self.collectionView.reloadData()
+        }
+    }
     
     private func configureUser(){
         nicknameLabel.text = viewModel.user?.nickname.uppercased()
@@ -201,24 +190,24 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
         
     }
     
-    @objc
-    private func addTapped() {
-        let settingsViewController = UserSettingsViewController()
-        if let sheet = settingsViewController.sheetPresentationController {
-            sheet.detents = [.medium()]
-            sheet.prefersGrabberVisible = true
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-        }
-        present(settingsViewController, animated: true) {
-        }
+    private func setup(){
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        self.navigationController?.navigationBar.isHidden = false
     }
+    
+    // MARK: - Layout
     
     private func layout(){
         view.backgroundColor = .white
         
         let menuImage = UIImage(named: "MenuIcon")
 
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: menuImage, style: .done, target: self, action: #selector(addTapped))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: menuImage, style: .done, target: self, action: #selector(settingsButtonTapped))
         
         view.addSubview(tableHeaderView)
         tableHeaderView.snp.makeConstraints { make in
@@ -269,15 +258,11 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
             make.top.equalTo(nicknameLabel.snp.bottom).offset(15)
         }
         
-        
         tableHeaderView.addSubview(auctionsTitleLabel)
         auctionsTitleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.top.equalTo(descriptionLabel.snp.bottom).offset(24)
-            
         }
-        
-        
         
         tableHeaderView.addSubview(collectionView)
         // move to tableView header
@@ -286,7 +271,6 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
             make.trailing.leading.equalToSuperview()
             make.height.equalTo(64)
         }
-        
         
         tableHeaderView.addSubview(picturesTitleLabel)
         picturesTitleLabel.snp.makeConstraints { make in
@@ -304,21 +288,16 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
         }
     }
     
-    private func setup(){
-        tableView.delegate = self
-        tableView.dataSource = self
-        
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        
-        self.navigationController?.navigationBar.isHidden = false 
+    // MARK: - Selectors
+    
+    @objc
+    private func settingsButtonTapped() {
+        viewModel.showSettings()
     }
 }
 
-
-
-
 //MARK: - UICollectionViewDelegate
+
 extension ProfileViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as? AuctionCollectionViewCell
@@ -327,7 +306,7 @@ extension ProfileViewController: UICollectionViewDelegate {
             let cell = cell,
             let auctionId = cell.auctionModel?.id
         else { return }
-//        present(PictureDetailViewController(viewModel: PictureDetailViewModel(with: auctionId)), animated: true)
+        viewModel.showPictrueDetails(with: auctionId)
     }
 }
 
@@ -344,6 +323,8 @@ extension ProfileViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: - UITableViewDelegate
+
 extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as? ProfilePicturesTableCell
@@ -352,11 +333,11 @@ extension ProfileViewController: UITableViewDelegate {
             let cell = cell,
             let pictureId = cell.pictureModel?.id
         else { return }
-//        present(PictureDetailViewController(viewModel: PictureDetailViewModel(with: pictureId)), animated: true)
+        viewModel.showPictrueDetails(with: pictureId)
     }
 }
 
-
+// MARK: - UITableViewDataSource
 
 extension ProfileViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -390,6 +371,3 @@ extension ProfileViewController: UITableViewDataSource {
         return cell
     }
 }
-
-
-
