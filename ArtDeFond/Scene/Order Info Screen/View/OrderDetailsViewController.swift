@@ -5,40 +5,12 @@
 //  Created by Someone on 23.08.2022.
 //
 
-import Foundation
+import Combine
 import UIKit
 import SnapKit
 
 
 class OrderDetailsViewController: UIViewController {
-    
-    private var viewModel: OrderDetailViewModel
-    
-    
-    private func makeLine() -> UIView {
-        let view = UIView()
-        view.backgroundColor = .white
-        
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }
-    
-    
-    private func makeStackView(title: String, view: UIView) -> UIStackView{
-        let titleLabel = UILabel()
-        titleLabel.text = title
-        titleLabel.font = Constants.Fonts.regular15
-        titleLabel.textColor = Constants.Colors.black
-        
-        let sv = UIStackView(arrangedSubviews: [titleLabel, view])
-        sv.axis = .horizontal
-        sv.spacing = 5
-        sv.distribution = .equalSpacing
-        
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
-    }
-    
     lazy var pictureTitleLabel: UILabel = {
         let label = UILabel()
         
@@ -119,9 +91,6 @@ class OrderDetailsViewController: UIViewController {
         return label
     }()
     
-    
-    
-    
     lazy var paymentInfoTitleLabel: UILabel = {
         let label = UILabel()
         
@@ -132,24 +101,6 @@ class OrderDetailsViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    private func titleLabel(with string: String) -> UILabel {
-        let label = UILabel()
-        label.text = string
-        label.textColor = Constants.Colors.black
-        label.font = Constants.Fonts.regular15
-        
-        return label
-    }
-    
-    private func checkLabel(with string: String) -> UILabel {
-        let label = UILabel()
-        label.text = string
-        label.textColor = Constants.Colors.gray
-        label.font = Constants.Fonts.regular15
-        
-        return label
-    }
     
     lazy var addressInfoLabel: UILabel = {
         let label = UILabel()
@@ -278,7 +229,10 @@ class OrderDetailsViewController: UIViewController {
         return label
     }()
     
+    private var viewModel: OrderDetailViewModel
+    private var subscriptions = Set<AnyCancellable>()
     
+    // MARK: - Life Cycle
     
     init(viewModel: OrderDetailViewModel) {
         self.viewModel = viewModel
@@ -289,27 +243,25 @@ class OrderDetailsViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        callToViewModelForUIUpdate()
-        self.layout()
+        bindingSetup()
+        layout()
     }
     
-    func callToViewModelForUIUpdate(){
-        self.viewModel.bindOrderDetailViewModelToController = {
-            self.configureView()
-            
-        }
+    // MARK: - ViewModel Binding
+    
+    private func bindingSetup(){
+        viewModel.$order
+            .sink {[weak self] orderModel in
+                self?.configureView(with: orderModel)
+            }
+            .store(in: &subscriptions)
     }
     
-    private func configureView() {
-        guard let model = viewModel.order else {
-            return
-        }
+    private func configureView(with model: OrderWithUsersModel?) {
+        guard let model else { return }
         
         self.pictureTitleLabel.text = model.picture?.title
         if let image = model.picture?.image {
@@ -344,18 +296,7 @@ class OrderDetailsViewController: UIViewController {
         dateInfoLabel.fadeTransition(0.4)
         self.dateInfoLabel.text = model.order.time.timeToShow()
         
-        let statusString: String
-        switch model.order.status {
-            
-        case .booked:
-            statusString = "Ожидает оплаты"
-        case .purchased:
-            statusString = "Ожидает отправки"
-        case .sent:
-            statusString = "Отправлено"
-        case .delivered:
-            statusString = "Доставлено"
-        }
+        let statusString = model.order.status.toString()
         
         statusInfoLabel.fadeTransition(0.4)
         self.statusInfoLabel.text = statusString
@@ -376,12 +317,55 @@ class OrderDetailsViewController: UIViewController {
         self.pictureCheckLabel.text = model.picture?.price.toRubles()
         totalLabel.fadeTransition(0.4)
         self.totalLabel.text = model.picture?.price.toRubles()
-        
-        
     }
     
-    private func layout() {
+    // MARK: - UI
+    
+    private func makeLine() -> UIView {
+        let view = UIView()
+        view.backgroundColor = .white
         
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }
+    
+    
+    private func makeStackView(title: String, view: UIView) -> UIStackView{
+        let titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.font = Constants.Fonts.regular15
+        titleLabel.textColor = Constants.Colors.black
+        
+        let sv = UIStackView(arrangedSubviews: [titleLabel, view])
+        sv.axis = .horizontal
+        sv.spacing = 5
+        sv.distribution = .equalSpacing
+        
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        return sv
+    }
+    
+    private func titleLabel(with string: String) -> UILabel {
+        let label = UILabel()
+        label.text = string
+        label.textColor = Constants.Colors.black
+        label.font = Constants.Fonts.regular15
+        
+        return label
+    }
+    
+    private func checkLabel(with string: String) -> UILabel {
+        let label = UILabel()
+        label.text = string
+        label.textColor = Constants.Colors.gray
+        label.font = Constants.Fonts.regular15
+        
+        return label
+    }
+    
+    // MARK: - Layout
+    
+    private func layout() {
         let padding = 40
         
         let scrollView = UIScrollView()
@@ -606,11 +590,3 @@ class OrderDetailsViewController: UIViewController {
         }
     }
 }
-
-
-
-
-
-
-
-

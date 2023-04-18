@@ -13,7 +13,7 @@ final class OrderService: OrderServiceDescription {
     private let database = Firestore.firestore()
     static let shared: OrderServiceDescription = OrderService()
     
-    #warning("TODO: get from elsewhere")
+#warning("TODO: get from elsewhere")
     let authService = AuthService()
     
     init() {}
@@ -77,7 +77,7 @@ final class OrderService: OrderServiceDescription {
         let newOrder = Order(id: id, picture_id: picture_id, time: time, address_id: address_id, status: status, seller_id: seller_id, buyer_id: buyer_id, total_amount: total_amount)
         
         try? database.collection("orders").document(id).setData(from: newOrder, encoder: Firestore.Encoder()) { error in
-
+            
             if let error = error {
                 completion(.failure(error))
             } else {
@@ -133,6 +133,19 @@ enum OrderStatus: String, Codable {
     case purchased
     case sent
     case delivered
+    
+    func toString() -> String {
+        switch self  {
+        case .booked:
+            return "Ожидает оплаты"
+        case .purchased:
+            return "Ожидает отправки"
+        case .sent:
+            return "Отправлено"
+        case .delivered:
+            return "Доставлено"
+        }
+    }
 }
 
 

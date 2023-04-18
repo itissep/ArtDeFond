@@ -410,7 +410,6 @@
 			isa = PBXGroup;
 			children = (
 				2C5491A228B4BDD60012032B /* View */,
-				2C5491A128B4BDCF0012032B /* Model */,
 				2C5491A028B4BDC70012032B /* ViewModel */,
 			);
 			path = "Order Info Screen";
@@ -422,13 +421,6 @@
 				2C28A2B628B64E4000233601 /* OrderDetailsViewModel.swift */,
 			);
 			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		2C5491A128B4BDCF0012032B /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		2C5491A228B4BDD60012032B /* View */ = {

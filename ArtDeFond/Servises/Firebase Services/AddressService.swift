@@ -18,7 +18,7 @@ final class AddressService: AddressServiceDescription {
     
     static let shared: AddressServiceDescription = AddressService()
     
-    private init() {}
+    init() {}
     
     
     func getAddressWithId(with id: String, completion: @escaping (Result<Address, Error>) -> Void) {

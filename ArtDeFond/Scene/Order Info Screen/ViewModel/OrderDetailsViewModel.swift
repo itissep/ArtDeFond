@@ -6,31 +6,45 @@
 //
 
 import Foundation
+import Combine
 
-class OrderDetailViewModel {
-    
-    var orderId: String
+class OrderDetailViewModel: NSObject {
 
-    private(set) var order: OrderWithUsersModel? {
-        didSet {
-            self.bindOrderDetailViewModelToController()
-        }
-    }
+    @Published var order: OrderWithUsersModel?
     
-    var bindOrderDetailViewModelToController : (() -> ()) = {}
- 
-    var refreshing = false
+    private let group = DispatchGroup()
     
-    required init(with orderId: String){
+    private let orderService: OrderServiceDescription
+    private let authService: AuthServiceDescription
+    private let pictureService: PictureServiceDescription
+    private let addressService: AddressServiceDescription
+    private let orderId: String
+    
+    init(
+        with orderId: String,
+        authService: AuthServiceDescription,
+        orderService: OrderServiceDescription,
+        pictureService: PictureServiceDescription,
+        addressService: AddressServiceDescription
+    ){
         self.orderId = orderId
+        self.orderService = orderService
+        self.authService = authService
+        self.pictureService = pictureService
+        self.addressService = addressService
+        super.init()
+        
         fetchData()
     }
     
+    private func fetchData() {
+        loadOrder { order in
+            self.order = order
+        }
+    }
     
-    let authService = AuthService()
-    
-    func loadOrder(completion: @escaping (OrderWithUsersModel?) -> Void) {
-        OrderService.shared.getOrderWithId(with: orderId) { [weak self] result in
+    private func loadOrder(completion: @escaping (OrderWithUsersModel?) -> Void) {
+        orderService.getOrderWithId(with: orderId) { [weak self] result in
             guard let self = self else {
                 completion(nil)
                 return
@@ -40,39 +54,15 @@ class OrderDetailViewModel {
             case .failure( _):
                 completion(nil)
             case .success(let orderData):
-                
                 var order = OrderWithUsersModel(order: orderData)
+            
+                self.loadPicture(for: orderData) { order.picture = $0 }
+                self.loadUser(with: orderData.buyer_id) { order.buyerUser = $0 }
+                self.loadUser(with: orderData.seller_id) { order.sellerUser = $0 }
+                self.loadAddress(for: orderData) { order.address = $0 }
                 
-                let group = DispatchGroup()
-                
-                group.enter()
-                self.loadPicture(for: orderData) { picture in
-                    group.leave()
-                    order.picture = picture
-                    
-                }
-                group.enter()
-                self.loadUser(with: orderData.buyer_id) { user in
-                    group.leave()
-                    order.buyerUser = user
-                }
-                
-                group.enter()
-                self.loadUser(with: orderData.seller_id) { user in
-                    group.leave()
-                    order.sellerUser = user
-                }
-                
-                group.enter()
-                self.loadAddress(for: orderData) { address in
-                    group.leave()
-                    order.address = address
-                }
-                
-                group.notify(queue: .main) {
-                    print(#function)
-                    self.refreshing = false
-                    completion(order)
+                self.group.notify(queue: .main) {
+                    self.order = order
                 }
             }
         }
@@ -80,45 +70,42 @@ class OrderDetailViewModel {
     
     
     
-    func loadPicture(for order: Order, completion: @escaping (Picture?) -> Void) {
-        PictureService().getPictureWithId(with: order.picture_id) { result in
+    private func loadPicture(for order: Order, completion: @escaping (Picture?) -> Void) {
+        group.enter()
+        pictureService.getPictureWithId(with: order.picture_id) {[weak self] result in
             switch result {
             case .failure( _):
                 completion(nil)
             case .success(let picture):
                 completion(picture)
             }
+            self?.group.leave()
         }
     }
     
-    func loadAddress(for order: Order, completion: @escaping (Address?) -> Void) {
-        AddressService.shared.getAddressWithId(with: order.address_id) { result  in
+    private func loadAddress(for order: Order, completion: @escaping (Address?) -> Void) {
+        group.enter()
+        addressService.getAddressWithId(with: order.address_id) {[weak self]  result  in
             switch result {
             case .failure( _):
                 completion(nil)
             case .success(let address):
                 completion(address)
             }
+            self?.group.leave()
         }
     }
     
-    func loadUser(with userId: String, completion: @escaping (User?) -> Void) {
-        authService.getUserInformation(for: userId) { result in
+    private func loadUser(with userId: String, completion: @escaping (User?) -> Void) {
+        group.enter()
+        authService.getUserInformation(for: userId) {[weak self] result in
             switch result {
             case .success(let user):
                 completion(user)
             case .failure( _):
                 completion(nil)
             }
-        }
-    }
-    
-    func fetchData() {
-        refreshing = true
-        
-        loadOrder { order in
-            self.refreshing = false
-            self.order = order
+            self?.group.leave()
         }
     }
 }

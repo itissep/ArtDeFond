@@ -26,6 +26,7 @@ class NotificationsCoordinator: NotificationsCoordinatorDescription {
     private var orderService: OrderServiceDescription?
     private var notificationService: NotificationServiceDescription?
     private var authService: AuthServiceDescription?
+    private var addressService: AddressServiceDescription?
     
     
     init(navigationController: UINavigationController) {
@@ -37,6 +38,7 @@ class NotificationsCoordinator: NotificationsCoordinatorDescription {
         orderService = container?.resolve(OrderServiceDescription.self)
         authService = container?.resolve(AuthServiceDescription.self)
         notificationService = container?.resolve(NotificationServiceDescription.self)
+        addressService = container?.resolve(AddressServiceDescription.self)
         goToNotifications()
     }
     
@@ -51,7 +53,12 @@ class NotificationsCoordinator: NotificationsCoordinatorDescription {
     }
     
     func goToOrderDetails(with id: String) {
-        let viewModel = OrderDetailViewModel(with: id)
+        guard let authService, let orderService, let pictureService, let addressService else { return }
+        let viewModel = OrderDetailViewModel(with: id,
+                                             authService: authService,
+                                             orderService: orderService,
+                                             pictureService: pictureService,
+                                             addressService: addressService)
         let orderDetailsVC = OrderDetailsViewController(viewModel: viewModel)
         navigationController.visibleViewController?.present(orderDetailsVC, animated: true)
     }

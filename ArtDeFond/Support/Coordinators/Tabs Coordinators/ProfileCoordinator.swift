@@ -32,6 +32,7 @@ class ProfileCoordinator: ProfileCoordinatorDescription {
     private var authService: AuthServiceDescription?
     private var pictureService: PictureServiceDescription?
     private var orderService: OrderServiceDescription?
+    private var addressService: AddressServiceDescription?
 
     
     init(navigationController: UINavigationController) {
@@ -42,6 +43,7 @@ class ProfileCoordinator: ProfileCoordinatorDescription {
         authService = container?.resolve(AuthServiceDescription.self)
         pictureService = container?.resolve(PictureServiceDescription.self)
         orderService = container?.resolve(OrderServiceDescription.self)
+        addressService = container?.resolve(AddressServiceDescription.self)
         
         goToProfile()
     }
@@ -75,6 +77,7 @@ class ProfileCoordinator: ProfileCoordinatorDescription {
     }
     
     func goToAddresses() {
+        guard let addressService, let authService else { return }
         let viewModel = AddressesViewModel()
         let addressesVC = AddressesViewController(viewModel: viewModel)
         addressesVC.modalPresentationStyle = .fullScreen
@@ -122,8 +125,13 @@ class ProfileCoordinator: ProfileCoordinatorDescription {
     }
     
     func showOrderDetails(with id: String) {
-        guard let ordersListVC else { return }
-        let viewModel = OrderDetailViewModel(with: id)
+        guard let ordersListVC,
+                let authService, let orderService, let pictureService, let addressService else { return }
+        let viewModel = OrderDetailViewModel(with: id,
+                                             authService: authService,
+                                             orderService: orderService,
+                                             pictureService: pictureService,
+                                             addressService: addressService)
         let orderDetailsVC = OrderDetailsViewController(viewModel: viewModel)
         ordersListVC.pushViewController(orderDetailsVC, animated: true)
     }

@@ -54,6 +54,10 @@ extension AppDelegate {
         container.register(NotificationServiceDescription.self) { _ in
             return NotificationService()
         }
+        
+        container.register(AddressServiceDescription.self) { _ in
+            return AddressService()
+        }
     }
 
     private func registerMockDependencies() {
@@ -71,6 +75,10 @@ extension AppDelegate {
         
         container.register(NotificationServiceDescription.self) { _ in
             return MockNotificationService()
+        }
+        
+        container.register(AddressServiceDescription.self) { _ in
+            return MockAddressService()
         }
     }
 }
