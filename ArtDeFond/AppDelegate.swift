@@ -17,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private let container = Container()
     
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
 
@@ -47,6 +46,14 @@ extension AppDelegate {
         container.register(AuthServiceDescription.self) { _ in
             return AuthService()
         }
+        
+        container.register(OrderServiceDescription.self) { _ in
+            return OrderService()
+        }
+        
+        container.register(NotificationServiceDescription.self) { _ in
+            return NotificationService()
+        }
     }
 
     private func registerMockDependencies() {
@@ -56,6 +63,14 @@ extension AppDelegate {
         
         container.register(AuthServiceDescription.self) { _ in
             return MockAuthService()
+        }
+        
+        container.register(OrderServiceDescription.self) { _ in
+            return MockOrderService()
+        }
+        
+        container.register(NotificationServiceDescription.self) { _ in
+            return MockNotificationService()
         }
     }
 }

@@ -7,25 +7,25 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 class NotificationsViewController: UIViewController {
+    // UI
+    private lazy var tableView = UITableView()
+    // Model
+    private var viewModel: NotificationsViewModel
+    private var subscriptions = Set<AnyCancellable>()
     
-    private var viewModel: NotificationsViewModel!
+    // MARK: - Life Cycle
     
-    lazy var tableView: UITableView = {
-        let tableView = UITableView()
-        
-        tableView.register(NotificationCommonTableCell.self, forCellReuseIdentifier: NotificationCommonTableCell.reusableId)
-        
-        tableView.separatorStyle = .none
-        tableView.showsVerticalScrollIndicator = false
-        
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 240
-        
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        return tableView
-    }()
+    init(viewModel: NotificationsViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -35,32 +35,20 @@ class NotificationsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        callToViewModelForUIUpdate()
+        bindingSetup()
     }
     
-    func callToViewModelForUIUpdate(){
-        
-        self.viewModel =  NotificationsViewModel()
-        self.viewModel.bindFeedViewModelToController = {
-            self.updateDataSource()
-        }
+    // MARK: - ViewModel Binding
+    
+    private func bindingSetup(){
+        viewModel.$refreshing
+            .sink {[weak self] isRefreshing in
+                self?.tableView.reloadData()
+            }
+            .store(in: &subscriptions)
     }
     
-    func updateDataSource(){
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    init(viewModel: NotificationsViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
+    // MARK: - tableView Setup
     
     private func setup(){
         view.backgroundColor = .white
@@ -71,6 +59,16 @@ class NotificationsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
+        tableView.register(NotificationCommonTableCell.self, forCellReuseIdentifier: NotificationCommonTableCell.reusableId)
+        
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
+        
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 240
+        
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -79,8 +77,9 @@ class NotificationsViewController: UIViewController {
             make.bottom.equalToSuperview()
         }
     }
-    
 }
+
+// MARK: - UITableViewDelegate
 
 extension NotificationsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -99,14 +98,16 @@ extension NotificationsViewController: UITableViewDelegate {
             guard let orderId = cellModel.notification.orderId else {
                 return
             }
-            present(OrderDetailsViewController(viewModel: OrderDetailViewModel(with: orderId)), animated: true)
+            viewModel.goToOrderDetails(with: orderId)
         case .yourPictureWasBetOn, .yourBetWasBeaten:
-            if let pictureId = cellModel.picture?.id {
-//                present(PictureDetailViewController(viewModel: PictureDetailViewModel(with: pictureId)), animated: true)
-            }
+            guard let pictureId = cellModel.picture?.id else { return }
+            
+            viewModel.goToPictureDetails(with: pictureId)
         }
     }
 }
+
+// MARK: - UITableViewDataSource
 
 extension NotificationsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -115,13 +116,13 @@ extension NotificationsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.alpha = 0
-
+        
         UIView.animate(
             withDuration: 0.5,
             delay: 0.05 * Double(indexPath.row),
             animations: {
                 cell.alpha = 1
-        })
+            })
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -132,16 +133,11 @@ extension NotificationsViewController: UITableViewDataSource {
         let cellModel: NotificationAndPictureModel?
         
         cellModel = viewModel.notifications[indexPath.row]
-
+        
         if let cellModel = cellModel {
             cell.configure(model: cellModel)
         }
         cell.selectionStyle = .none
         return cell
     }
-    
-    
 }
-
-
-

@@ -15,8 +15,7 @@ final class OrderService: OrderServiceDescription {
     
     let authService = AuthService()
     
-    private init() {}
-    
+    init() {}
     
     func getOrderWithId(with id: String, completion: @escaping (Result<Order, Error>) -> Void) {
         database.collection("orders").document(id).getDocument { (document, err) in

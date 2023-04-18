@@ -16,7 +16,7 @@ final class NotificationService: NotificationServiceDescription {
     static let shared: NotificationServiceDescription = NotificationService()
     let authService = AuthService()
     
-    private init() {}
+    init() {}
     
     func loadNotifications(completion: @escaping (Result<[NotificationModel], Error>) -> Void) {
         guard let userId = authService.userID() else {

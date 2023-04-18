@@ -5,28 +5,42 @@
 //  Created by Someone on 22.08.2022.
 //
 
-import Foundation
 import UIKit
+import Combine
 
 class NotificationsViewModel: NSObject {
-
-    private(set) var notifications : [NotificationAndPictureModel] = [] {
-            didSet {
-                self.bindFeedViewModelToController()
-            }
-        }
     
-    var bindFeedViewModelToController : (() -> ()) = {}
+    var notifications : [NotificationAndPictureModel] = []
+    @Published var refreshing = false
     
-    var refreshing = false
+    private let pictureService: PictureServiceDescription
+    private let notificationService: NotificationServiceDescription
+    private let coordinator: NotificationsCoordinatorDescription
     
-    override init() {
-            super.init()
-            fetchData()
-        }
-
-    func loadNotifications(completion: @escaping ([NotificationAndPictureModel]) -> Void) {
-        NotificationService.shared.loadNotifications { [weak self]
+    init(pictureService: PictureServiceDescription,
+         notificationService: NotificationServiceDescription,
+         coordinator: NotificationsCoordinatorDescription) {
+        self.pictureService = pictureService
+        self.notificationService = notificationService
+        self.coordinator = coordinator
+        super.init()
+        fetchData()
+    }
+    
+    public func refresh() {
+        fetchData()
+    }
+    
+    public func goToOrderDetails(with id: String) {
+        coordinator.goToOrderDetails(with: id)
+    }
+    
+    public func goToPictureDetails(with id: String) {
+        coordinator.goToPictureDetails(with: id)
+    }
+    
+    private func loadNotifications(completion: @escaping ([NotificationAndPictureModel]) -> Void) {
+        notificationService.loadNotifications { [weak self]
             result in
             
             guard let self = self else {
@@ -57,8 +71,8 @@ class NotificationsViewModel: NSObject {
         }
     }
     
-    func loadPicture(for notification: NotificationModel, completion: @escaping (Picture?) -> Void) {
-        PictureService().getPictureWithId(with: notification.pictureId) { result in
+    private func loadPicture(for notification: NotificationModel, completion: @escaping (Picture?) -> Void) {
+        pictureService.getPictureWithId(with: notification.pictureId) { result in
             switch result {
             case .failure( _):
                 completion(nil)
@@ -68,7 +82,7 @@ class NotificationsViewModel: NSObject {
         }
     }
     
-    func fetchData() {
+    private func fetchData() {
         refreshing = true
         
         loadNotifications { notifications in

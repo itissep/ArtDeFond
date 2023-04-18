@@ -10,8 +10,8 @@ import UIKit
 import Swinject
 
 protocol NotificationsCoordinatorDescription: Coordinator {
-    //    @discardableResult func goToOrder2Screen(animated: Bool ) -> Self
-    //    @discardableResult func goToOrder3Screen(animated: Bool) -> Self
+    func goToOrderDetails(with id: String)
+    func goToPictureDetails(with id: String)
 }
 
 
@@ -22,18 +22,44 @@ class NotificationsCoordinator: NotificationsCoordinatorDescription {
 
     var container: Container?
     
+    private var pictureService: PictureServiceDescription?
+    private var orderService: OrderServiceDescription?
+    private var notificationService: NotificationServiceDescription?
+    private var authService: AuthServiceDescription?
+    
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
     }
 
     
     func start() {
+        pictureService = container?.resolve(PictureServiceDescription.self)
+        orderService = container?.resolve(OrderServiceDescription.self)
+        authService = container?.resolve(AuthServiceDescription.self)
+        notificationService = container?.resolve(NotificationServiceDescription.self)
         goToNotifications()
     }
     
-    func goToNotifications() {
-        let viewModel = NotificationsViewModel()
+    private func goToNotifications() {
+        guard let pictureService, let notificationService else { return }
+        let viewModel = NotificationsViewModel(
+            pictureService: pictureService,
+            notificationService: notificationService,
+            coordinator: self)
         let notificationVC = NotificationsViewController(viewModel: viewModel)
         navigationController.pushViewController(notificationVC, animated: true)
+    }
+    
+    func goToOrderDetails(with id: String) {
+        let viewModel = OrderDetailViewModel(with: id)
+        let orderDetailsVC = OrderDetailsViewController(viewModel: viewModel)
+        navigationController.visibleViewController?.present(orderDetailsVC, animated: true)
+    }
+    
+    func goToPictureDetails(with id: String) {
+        guard let pictureService, let authService else { return }
+        let viewModel = PictureDetailViewModel(with: id, pictureService: pictureService, authService: authService)
+        let pictureVC = PictureDetailViewController(viewModel: viewModel)
+        navigationController.visibleViewController?.present(pictureVC, animated: true)
     }
 }

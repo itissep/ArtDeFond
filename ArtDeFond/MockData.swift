@@ -10,7 +10,7 @@ import Foundation
 struct MockData {
     static let picture = Picture(id: "", title: "title", image: "image", description: "description", year: 2001, materials: "Some cool materials", width: 12, height: 23, author_id: "authorId", price: 1234, isAuction: false, tags: [], time: Date.now)
     
-    static let order = Order(id: "id", picture_id: "some pic id", time: .now, address_id: "", status: .booked, seller_id: "", buyer_id: "", total_amount: 1234)
+    static let order = Order(id: "id", picture_id: "some pic id", time: .now, address_id: "", status: .purchased, seller_id: "", buyer_id: "", total_amount: 1234)
     
     static let user = User(id: "id", email: "email", nickname: "nickname", description: "fantastic person", tags: [], avatar_image: "avatar image", account_balance: 123)
     
