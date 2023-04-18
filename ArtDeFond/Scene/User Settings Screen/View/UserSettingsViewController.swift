@@ -95,7 +95,7 @@ extension UserSettingsViewController: UITableViewDelegate {
                         withTitle: "Хотите выйти из профиля?",
                         message: "Вы всегда можете к нам вернуться!",
                         buttonString: "Выйти") { _ in
-                            AuthManager.shared.signOut { _ in
+                            AuthService.shared.signOut { _ in
                                  // выкинуть на ленту и обновить вкладку профиля
                                 }
                             }
@@ -105,7 +105,7 @@ extension UserSettingsViewController: UITableViewDelegate {
                         withTitle: "Хотите удалить профиль?",
                         message: "Это дейстивие нельзя отменить. Вы покинете нас безвозвратно!",
                         buttonString: "Удалить") { _ in
-                            AuthManager.shared.deleteAccount { _ in
+                            AuthService.shared.deleteAccount { _ in
                                 // выкинуть на ленту и обновить вкладку профиля
                             }
                         }

@@ -42,7 +42,7 @@ class AuctionCollectionViewCell: UICollectionViewCell {
     
     public func configure(with model: CircleFeedAuctionModel) {
         self.auctionModel = model
-        ImageManager.shared.image(with: model.image) { [weak self] result in
+        ImageService.shared.image(with: model.image) { [weak self] result in
             switch result {
             case .success(let image):
                 self?.imageView.setImage(image)

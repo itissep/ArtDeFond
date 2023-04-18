@@ -11,40 +11,13 @@ import FirebaseFirestoreSwift
 
 // сделано не правильно, однако времени исправлять нет (синглтон)
 // хорошо было бы сделать отдельную структуру для этого слоя
-protocol PicturesManagerDescription {
-    
-    func loadPictureInformation(type: ProductCollectionType, completion: @escaping (Result<[Picture], Error>) -> Void)
-    
-    func newPicture(
-        id: String,
-        title: String,
-        image: String,
-        description: String,
-        year: Int,
-        materials: String,
-        width: Int,
-        height: Int,
-        price: Int,
-        isAuction: Bool,
-        auction: Auction?,
-        tags: [String],
-        completion: @escaping (Result<Picture, Error>) -> Void
-    )
-    
-    func updatePictureInformation(for id: String, with newPicture: Picture, completion: @escaping (Result<Picture, Error>) -> Void)
-    
-    func deletePicture(with id: String)
-    
-    func getPictureWithId(with id: String, completion: @escaping (Result<Picture, Error>) -> Void)
-}
 
-
-final class PicturesManager: PicturesManagerDescription {
+final class PictureService: PictureServiceDescription {
 
     
     private let database = Firestore.firestore()
     
-    static let shared: PicturesManagerDescription = PicturesManager()
+    static let shared: PictureServiceDescription = PictureService()
     
     private init() {}
     
@@ -107,7 +80,7 @@ final class PicturesManager: PicturesManagerDescription {
         tags: [String],
         completion: @escaping (Result<Picture, Error>) -> Void
     ) {
-        guard let author_id = AuthManager.shared.userID() else {
+        guard let author_id = AuthService.shared.userID() else {
             completion(.failure(SomeErrors.somethingWentWrong))
             return
         }
@@ -175,7 +148,7 @@ final class PicturesManager: PicturesManagerDescription {
 
 
 
-private extension PicturesManager {
+private extension PictureService {
     
     func pictures(from snapshot: QuerySnapshot?) -> [Picture]? {
         return snapshot?.documents.compactMap { picture(from: $0.data()) }

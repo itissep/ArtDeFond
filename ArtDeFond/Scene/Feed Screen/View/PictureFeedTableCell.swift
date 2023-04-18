@@ -83,7 +83,7 @@ class PictureFeedTableCell: UITableViewCell{
         self.authorLabel.text = model.user?.nickname.uppercased()
         self.titleLabel.text = model.picture.title
     
-        ImageManager.shared.image(with: model.picture.image) { result in
+        ImageService.shared.image(with: model.picture.image) { result in
             switch result {
             case .failure(let error):
                 print(error)
@@ -93,7 +93,7 @@ class PictureFeedTableCell: UITableViewCell{
         }
         
         if let avatarImage = model.user?.avatar_image {
-            ImageManager.shared.image(with: avatarImage) { result in
+            ImageService.shared.image(with: avatarImage) { result in
                 switch result {
                 case .failure(let error):
                     print(error)

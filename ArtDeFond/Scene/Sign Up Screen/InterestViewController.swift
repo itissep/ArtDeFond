@@ -106,7 +106,7 @@ class InterestViewController: UIViewController {
         
         var imageString = ""
         
-        ImageManager.shared.upload(image: avatar ?? UIImage()) { result in
+        ImageService.shared.upload(image: avatar ?? UIImage()) { result in
             switch result{
             case.success(let resultImageString):
                 imageString = resultImageString
@@ -116,7 +116,7 @@ class InterestViewController: UIViewController {
                 break
             }
             
-            AuthManager.shared.signUp(withEmail: email ?? "test@test.ru", withPassword: password ?? "password", image: imageString, nickname: nickname ?? "CoolBoy", description: aboutMe ?? "I am very cool artist", tags: []) { result in
+            AuthService.shared.signUp(withEmail: email ?? "test@test.ru", withPassword: password ?? "password", image: imageString, nickname: nickname ?? "CoolBoy", description: aboutMe ?? "I am very cool artist", tags: []) { result in
                 switch result{
                 case.success(let result):
                     NotificationCenter.default.post(name: NSNotification.Name("InterestViewController.signUp.succes.ArtDeFond"), object: nil)

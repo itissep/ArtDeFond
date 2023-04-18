@@ -9,31 +9,16 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-
-protocol NotificationManagerDescription {
-    func loadNotifications(completion: @escaping (Result<[NotificationModel], Error>) -> Void)
-    func newNotification(
-        pictureId: String, // picture?
-        type: NotificationType,
-        orderId: String? ,// order?
-        orderStatus: OrderStatus?, // ??
-        time: Date,
-        completion: @escaping (Result<NotificationModel, Error>) -> Void
-    )
-    
-    
-}
-
-final class NotificationManager: NotificationManagerDescription {
+final class NotificationService: NotificationServiceDescription {
     
     private let database = Firestore.firestore()
     
-    static let shared: NotificationManagerDescription = NotificationManager()
+    static let shared: NotificationServiceDescription = NotificationService()
     
     private init() {}
     
     func loadNotifications(completion: @escaping (Result<[NotificationModel], Error>) -> Void) {
-        guard let userId = AuthManager.shared.userID() else {
+        guard let userId = AuthService.shared.userID() else {
             return
         }
         
@@ -58,7 +43,7 @@ final class NotificationManager: NotificationManagerDescription {
         time: Date,
         completion: @escaping (Result<NotificationModel, Error>) -> Void
     ) {
-        guard let author_id = AuthManager.shared.userID() else {
+        guard let author_id = AuthService.shared.userID() else {
             completion(.failure(SomeErrors.somethingWentWrong))
             return
         }
@@ -83,7 +68,7 @@ final class NotificationManager: NotificationManagerDescription {
 }
 
 
-extension NotificationManager {
+extension NotificationService {
     func notifications(from snapshot: QuerySnapshot?) -> [NotificationModel]? {
         return snapshot?.documents.compactMap { notification(from: $0.data()) }
     }

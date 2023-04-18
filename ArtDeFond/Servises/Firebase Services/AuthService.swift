@@ -12,40 +12,11 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-protocol AuthManagerDescription {
-    
-    func userID() -> String?
-    
-    func isAuthed() -> Bool
-
-    func signIn(withEmail email: String, withPassword password: String, completion: @escaping (Result<Void, Error>) -> Void)
-    
-    func signUp(
-        withEmail email: String,
-        withPassword password: String,
-        image: String,
-        nickname: String,
-        description: String,
-        tags: [String],
-        completion: @escaping (Result<Void, Error>) -> Void
-    )
-    
-    func getUserInformation(for user_id: String, completion: @escaping (Result<User, Error>) -> Void)
-    
-//    func updateUserInformation(for user_id: String, completion: @escaping ()->())
-    
-    // user updater class??? for various types of updates (email, password, etc)
-    
-    func signOut(completion: @escaping (Result<Void, Error>) -> Void)
-    
-    func deleteAccount(completion: @escaping (Result<Void, Error>) -> Void)
-}
-
-final class AuthManager: AuthManagerDescription {
+final class AuthService: AuthServiceDescription {
     
     private let database = Firestore.firestore()
     
-    static let shared: AuthManagerDescription = AuthManager()
+    static let shared: AuthServiceDescription = AuthService()
     
     private init() {}
     
@@ -170,7 +141,7 @@ final class AuthManager: AuthManagerDescription {
 }
 
 
-extension AuthManager {
+extension AuthService {
     func user(from data: [String: Any]) -> User? {
         let result = try? Firestore.Decoder().decode(User.self, from: data)
         return result

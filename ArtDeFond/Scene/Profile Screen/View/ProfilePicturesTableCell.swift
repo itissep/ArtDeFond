@@ -102,7 +102,7 @@ class ProfilePicturesTableCell: UITableViewCell{
         self.priceLabel.text = (model.price).toRubles()
         self.detailsLabel.text = detailsString
         
-        ImageManager.shared.image(with: model.image) { [weak self] result in
+        ImageService.shared.image(with: model.image) { [weak self] result in
             switch result {
             case .success(let image):
                 self?.image.setImage(image)

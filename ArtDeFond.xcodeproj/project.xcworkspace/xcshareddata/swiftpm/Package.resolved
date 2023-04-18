@@ -136,6 +136,15 @@
       }
     },
     {
+      "identity" : "swinject",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Swinject/Swinject.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "dfb78563c581eea560ea90c19dbe8d1d93d11260"
+      }
+    },
+    {
       "identity" : "taglistview",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ElaWorkshop/TagListView",

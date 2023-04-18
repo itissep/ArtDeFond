@@ -11,13 +11,8 @@ import UIKit
 import FirebaseStorage
 import Kingfisher
 
-protocol ImageManagerDescription {
-    func upload(image: UIImage, completion: @escaping (Result<String, Error>) -> Void)
-    func image(with name: String, completion: @escaping (Result<UIImage, Error>) -> Void)
-}
-
-final class ImageManager: ImageManagerDescription {
-    static let shared: ImageManagerDescription = ImageManager()
+final class ImageService: ImageServiceDescription {
+    static let shared: ImageServiceDescription = ImageService()
 
     private let storageRef = Storage.storage().reference()
 

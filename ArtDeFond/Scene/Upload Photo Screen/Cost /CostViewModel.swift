@@ -55,7 +55,7 @@ final class CostViewModel{
         
         let group = DispatchGroup()
         group.enter()
-        ImageManager.shared.upload(image: pictureImage) { result in
+        ImageService.shared.upload(image: pictureImage) { result in
             switch result {
             case .failure( _):
                 print("error with image")
@@ -67,7 +67,7 @@ final class CostViewModel{
         }
         
         group.notify(queue: .main) {
-            PicturesManager.shared.newPicture(
+            PictureService.shared.newPicture(
                 id: id,
                 title: pictureTitle,
                 image: imageNameFromStore,

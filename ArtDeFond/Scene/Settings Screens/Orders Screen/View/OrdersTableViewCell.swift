@@ -102,7 +102,7 @@ class OrdersTableViewCell: UITableViewCell{
         self.statusLabel.text = orderStatusString
         
         if let picture = model.picture {
-            ImageManager.shared.image(with: picture.image) { result in
+            ImageService.shared.image(with: picture.image) { result in
                 switch result {
                 case .failure( _):
                     self.image.image = nil

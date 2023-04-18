@@ -26,7 +26,7 @@ class NotificationsViewModel: NSObject {
         }
 
     func loadNotifications(completion: @escaping ([NotificationAndPictureModel]) -> Void) {
-        NotificationManager.shared.loadNotifications { [weak self]
+        NotificationService.shared.loadNotifications { [weak self]
             result in
             
             guard let self = self else {
@@ -58,7 +58,7 @@ class NotificationsViewModel: NSObject {
     }
     
     func loadPicture(for notification: NotificationModel, completion: @escaping (Picture?) -> Void) {
-        PicturesManager.shared.getPictureWithId(with: notification.pictureId) { result in
+        PictureService.shared.getPictureWithId(with: notification.pictureId) { result in
             switch result {
             case .failure( _):
                 completion(nil)

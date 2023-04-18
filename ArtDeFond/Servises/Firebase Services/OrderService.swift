@@ -9,36 +9,9 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-protocol OrderManagerDescription {
-    
-    func getOrderWithId(with id: String, completion: @escaping (Result<Order, Error>) -> Void)
-    
-    func loadOrders(type: OrderType, completion: @escaping (Result<[Order], Error>) -> Void)
-    
-    func newOrder(
-        id: String,
-        picture_id: String, // picture
-        time: Date,
-        address_id: String, // address
-        status: OrderStatus,
-        seller_id: String, // user
-        buyer_id: String, // user
-        total_amount: Int,
-        completion: @escaping (Result<Order, Error>) -> Void
-    )
-    
-    func updateOrderStatus(
-        for order_id: String,
-        to newStatus: OrderStatus,
-        completion: @escaping (Result<Order, Error>) -> Void
-    )
-    
-}
-
-
-final class OrderManager: OrderManagerDescription {
+final class OrderService: OrderServiceDescription {
     private let database = Firestore.firestore()
-    static let shared: OrderManagerDescription = OrderManager()
+    static let shared: OrderServiceDescription = OrderService()
     private init() {}
     
     
@@ -63,7 +36,7 @@ final class OrderManager: OrderManagerDescription {
     func loadOrders(type: OrderType, completion: @escaping (Result<[Order], Error>) -> Void) {
         var ref: Query = database.collection("orders")
         
-        guard let user_id = AuthManager.shared.userID() else {
+        guard let user_id = AuthService.shared.userID() else {
             return
         }
         
@@ -120,7 +93,7 @@ final class OrderManager: OrderManagerDescription {
     
 }
 
-extension OrderManager {
+extension OrderService {
     
     func orders(from snapshot: QuerySnapshot?) -> [Order]? {
         return snapshot?.documents.compactMap { order(from: $0.data()) }

@@ -30,7 +30,7 @@ class OrderDetailViewModel {
     
     
     func loadOrder(completion: @escaping (OrderWithUsersModel?) -> Void) {
-        OrderManager.shared.getOrderWithId(with: orderId) { [weak self] result in
+        OrderService.shared.getOrderWithId(with: orderId) { [weak self] result in
             guard let self = self else {
                 completion(nil)
                 return
@@ -81,7 +81,7 @@ class OrderDetailViewModel {
     
     
     func loadPicture(for order: Order, completion: @escaping (Picture?) -> Void) {
-        PicturesManager.shared.getPictureWithId(with: order.picture_id) { result in
+        PictureService.shared.getPictureWithId(with: order.picture_id) { result in
             switch result {
             case .failure( _):
                 completion(nil)
@@ -92,7 +92,7 @@ class OrderDetailViewModel {
     }
     
     func loadAddress(for order: Order, completion: @escaping (Address?) -> Void) {
-        AddressManager.shared.getAddressWithId(with: order.address_id) { result  in
+        AddressService.shared.getAddressWithId(with: order.address_id) { result  in
             switch result {
             case .failure( _):
                 completion(nil)
@@ -103,7 +103,7 @@ class OrderDetailViewModel {
     }
     
     func loadUser(with userId: String, completion: @escaping (User?) -> Void) {
-        AuthManager.shared.getUserInformation(for: userId) { result in
+        AuthService.shared.getUserInformation(for: userId) { result in
             switch result {
             case .success(let user):
                 completion(user)

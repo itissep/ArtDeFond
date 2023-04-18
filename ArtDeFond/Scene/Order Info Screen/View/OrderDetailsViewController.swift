@@ -313,7 +313,7 @@ class OrderDetailsViewController: UIViewController {
         
         self.pictureTitleLabel.text = model.picture?.title
         if let image = model.picture?.image {
-            ImageManager.shared.image(with: image) { result in
+            ImageService.shared.image(with: image) { result in
                 switch result {
                 case .failure( _):
                     self.pictureImageView.image = nil
@@ -325,7 +325,7 @@ class OrderDetailsViewController: UIViewController {
         
         self.sellerUsernameLabel.text = model.sellerUser?.nickname.uppercased()
         if let image = model.sellerUser?.avatar_image {
-            ImageManager.shared.image(with: image) { result in
+            ImageService.shared.image(with: image) { result in
                 switch result {
                 case .failure( _):
                     self.sellerImageView.image = nil
@@ -363,7 +363,7 @@ class OrderDetailsViewController: UIViewController {
         buyerUsernameLabel.fadeTransition(0.4)
         self.buyerUsernameLabel.text = model.buyerUser?.nickname.uppercased()
         if let image = model.buyerUser?.avatar_image {
-            ImageManager.shared.image(with: image) { result in
+            ImageService.shared.image(with: image) { result in
                 switch result {
                 case .failure( _):
                     self.buyerImageView.image = nil

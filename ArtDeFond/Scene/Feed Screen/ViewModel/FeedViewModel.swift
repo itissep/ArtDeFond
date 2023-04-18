@@ -32,7 +32,7 @@ class FeedViewModel: NSObject {
         }
     
     func loadPictures(completion: @escaping ([PictureWithAuthorModel]) -> Void) {
-        PicturesManager.shared.loadPictureInformation(type: .pictures) { [weak self] result in
+        PictureService.shared.loadPictureInformation(type: .pictures) { [weak self] result in
             guard let self = self else {
                 completion([])
                 return
@@ -62,7 +62,7 @@ class FeedViewModel: NSObject {
     }
     
     func loadUser(for picture: Picture, completion: @escaping (User?) -> Void) {
-        AuthManager.shared.getUserInformation(for: picture.author_id) { result in
+        AuthService.shared.getUserInformation(for: picture.author_id) { result in
             switch result {
             case .success(let user):
                 completion(user)
@@ -87,7 +87,7 @@ class FeedViewModel: NSObject {
         
         group.enter()
         var outputAuctions = [CircleFeedAuctionModel]()
-        PicturesManager.shared.loadPictureInformation(type: .auctions) { result in
+        PictureService.shared.loadPictureInformation(type: .auctions) { result in
             switch result {
             case .failure(let error):
                 print(error)

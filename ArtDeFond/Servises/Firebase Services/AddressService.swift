@@ -12,38 +12,11 @@ import FirebaseFirestoreSwift
 
 // FIXIT: address to Codable
 
-protocol AddressManagerDescription {
-    func getAddressWithId(with id: String, completion: @escaping (Result<Address, Error>) -> Void)
-    
-    func loadUsersAddressInformation(
-        for user_id: String,
-        completion: @escaping (Result<[Address], Error>) -> Void)
-    
-    func newAddress(
-        id: String,
-        user_id: String,
-        street: String,
-        house_number: Int,
-        apartment_number: Int,
-        post_index: Int,
-        district: String,
-        city: String,
-        completion: @escaping (Result<Address, Error>) -> Void
-    )
-    
-    func updateAddressInformation(
-        for id: String,
-        with newAddress: Address,
-        completion: @escaping (Result<Address, Error>) -> Void)
-    
-    func deleteAddress(with id: String)
-}
-
-final class AddressManager: AddressManagerDescription {
+final class AddressService: AddressServiceDescription {
     
     private let database = Firestore.firestore()
     
-    static let shared: AddressManagerDescription = AddressManager()
+    static let shared: AddressServiceDescription = AddressService()
     
     private init() {}
     
@@ -156,7 +129,7 @@ final class AddressManager: AddressManagerDescription {
     
 }
 
-extension AddressManager {
+extension AddressService {
     func addresses(from snapshot: QuerySnapshot?) -> [Address]? {
         return snapshot?.documents.compactMap { address(from: $0.data(), with: $0.documentID) }
     }

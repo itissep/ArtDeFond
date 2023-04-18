@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>114011865832-0oe1pg53rlr9ia2g9oblmr2858qdn3ab.apps.googleusercontent.com</string>
+	<string>114011865832-rp4qmu3qji2ge8rmb397b4g1vhepaagl.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.114011865832-0oe1pg53rlr9ia2g9oblmr2858qdn3ab</string>
+	<string>com.googleusercontent.apps.114011865832-rp4qmu3qji2ge8rmb397b4g1vhepaagl</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAccyccpGUA6jXB94dNdQ1SYAK8Fv-afSE</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>VKSiriusTeam4.ArtDeFond</string>
+	<string>com.someone.ArtDeFond</string>
 	<key>PROJECT_ID</key>
 	<string>artdefond</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:114011865832:ios:652dc286a7383f0699ff5d</string>
+	<string>1:114011865832:ios:476eab1f57a3973999ff5d</string>
 </dict>
 </plist>

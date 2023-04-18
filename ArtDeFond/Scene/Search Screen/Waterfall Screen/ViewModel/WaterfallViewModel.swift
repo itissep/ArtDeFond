@@ -37,7 +37,7 @@ class WaterfallViewModel {
     
     
     func loadPictures(for tagName: String, completion: @escaping ([Picture]) -> Void){
-        PicturesManager.shared.loadPictureInformation(type: .searchTag(text: tagName)) { result in
+        PictureService.shared.loadPictureInformation(type: .searchTag(text: tagName)) { result in
             switch result {
             case .failure( _):
                 completion([])

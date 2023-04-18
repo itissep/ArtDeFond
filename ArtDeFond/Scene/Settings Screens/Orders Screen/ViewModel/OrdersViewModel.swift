@@ -38,7 +38,7 @@ class OrdersViewModel {
     
     func loadOrders(completion: @escaping ([OrderAndPictureModel]) -> Void) {
         
-        OrderManager.shared.loadOrders(type: type) { [weak self] result in
+        OrderService.shared.loadOrders(type: type) { [weak self] result in
             
             guard let self = self else {
                 completion([])
@@ -71,7 +71,7 @@ class OrdersViewModel {
     }
     
     func loadPicture(for order: Order, completion: @escaping (Picture?) -> Void) {
-        PicturesManager.shared.getPictureWithId(with: order.picture_id) { result in
+        PictureService.shared.getPictureWithId(with: order.picture_id) { result in
             switch result {
             case .failure( _):
                 completion(nil)

@@ -40,7 +40,7 @@ class WaterfallCollectionViewCell: UICollectionViewCell {
     
     func configure(model: Picture) {
         self.model = model
-        ImageManager.shared.image(with: model.image) { result in
+        ImageService.shared.image(with: model.image) { result in
             switch result {
             case .failure(let error):
                 print(error)

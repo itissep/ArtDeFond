@@ -19,11 +19,11 @@ class AddressesViewModel {
     func fetchAdresses(completion: @escaping () -> Void) {
         refreshing = true
 
-        guard let userId = AuthManager.shared.userID() else {
+        guard let userId = AuthService.shared.userID() else {
             return
         }
         
-        AddressManager.shared.loadUsersAddressInformation(for: userId) { [weak self] result in
+        AddressService.shared.loadUsersAddressInformation(for: userId) { [weak self] result in
             switch result {
             case .failure(let error):
                 print(error)

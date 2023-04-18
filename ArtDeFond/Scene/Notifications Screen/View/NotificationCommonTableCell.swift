@@ -95,7 +95,7 @@ class NotificationCommonTableCell: UITableViewCell{
         
         if let picture = model.picture {
             self.titleLabel.text = model.picture?.title
-            ImageManager.shared.image(with: picture.image) { result in
+            ImageService.shared.image(with: picture.image) { result in
                 switch result {
                 case .failure(let error):
                     print(error)

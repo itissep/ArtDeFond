@@ -258,7 +258,7 @@ class PictureDetailViewController: UIViewController {
             return
         }
         
-        ImageManager.shared.image(with: picture.image) {[weak self] result in
+        ImageService.shared.image(with: picture.image) {[weak self] result in
             switch result {
             case .failure(let error):
                 let alert = UIAlertController(title: "Уууупс", message: error.localizedDescription, preferredStyle: .alert)
@@ -345,7 +345,7 @@ class PictureDetailViewController: UIViewController {
         guard let model = viewModel.picture else {
             return
         }
-        ImageManager.shared.image(with: model.picture.image) { [weak self] result in
+        ImageService.shared.image(with: model.picture.image) { [weak self] result in
             switch result {
             case .success(let image):
                 self?.pictureImageView.setImage(image)
@@ -378,7 +378,7 @@ class PictureDetailViewController: UIViewController {
         authorLabel.text = model.user?.nickname.uppercased()
         
         if let user = model.user {
-            ImageManager.shared.image(with: user.avatar_image) { [weak self] result in
+            ImageService.shared.image(with: user.avatar_image) { [weak self] result in
                 switch result {
                 case .success(let image):
                     self?.authorImageView.setImage(image)
