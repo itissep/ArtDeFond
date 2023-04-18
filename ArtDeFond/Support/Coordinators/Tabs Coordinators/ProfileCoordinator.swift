@@ -78,10 +78,11 @@ class ProfileCoordinator: ProfileCoordinatorDescription {
     
     func goToAddresses() {
         guard let addressService, let authService else { return }
-        let viewModel = AddressesViewModel()
+        let viewModel = AddressesViewModel(authService: authService, addressService: addressService)
         let addressesVC = AddressesViewController(viewModel: viewModel)
-        addressesVC.modalPresentationStyle = .fullScreen
-        navigationController.visibleViewController?.present(addressesVC, animated: true)
+        let navController = UINavigationController(rootViewController: addressesVC)
+        navController.modalPresentationStyle = .fullScreen
+        navigationController.visibleViewController?.present(navController, animated: true)
     }
     
     func showSignOutAlert() {

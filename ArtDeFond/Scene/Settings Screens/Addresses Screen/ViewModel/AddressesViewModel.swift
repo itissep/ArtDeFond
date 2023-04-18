@@ -6,28 +6,31 @@
 //
 
 import Foundation
+import Combine
 
-
-class AddressesViewModel {
-    var addresses: [AddressesModel] = []
+class AddressesViewModel: NSObject {
+    @Published var addresses: [AddressesModel] = []
     
-    var error: Error?
-    var refreshing = false
+    private let authService: AuthServiceDescription
+    private let addressService: AddressServiceDescription
     
-    let authService = AuthService()
+    init(authService: AuthServiceDescription, addressService: AddressServiceDescription) {
+        self.addressService = addressService
+        self.authService = authService
+        super.init()
+        
+        fetchAdresses()
+    }
     
-    func fetchAdresses(completion: @escaping () -> Void) {
-        refreshing = true
-
+    func fetchAdresses() {
         guard let userId = authService.userID() else {
             return
         }
         
-        AddressService.shared.loadUsersAddressInformation(for: userId) { [weak self] result in
+        addressService.loadUsersAddressInformation(for: userId) { [weak self] result in
             switch result {
             case .failure(let error):
                 print(error)
-                completion()
             case .success(let addressesInfo):
                 var addresses = [AddressesModel]()
                 addressesInfo.forEach { address in
@@ -36,7 +39,6 @@ class AddressesViewModel {
                     addresses.append(newAddress)
                 }
                 self?.addresses = addresses
-                completion()
             }
         }
     }

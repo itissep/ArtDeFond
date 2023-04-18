@@ -90,7 +90,6 @@
 		8B40537A28B59F3900E6E776 /* CostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B40537928B59F3900E6E776 /* CostModel.swift */; };
 		8B40537E28B5FBB700E6E776 /* Screen Size.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B40537D28B5FBB700E6E776 /* Screen Size.swift */; };
 		8B40538028B5FC5100E6E776 /* SearchTagCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B40537F28B5FC5100E6E776 /* SearchTagCollectionCell.swift */; };
-		8B51DE4A28A97DCB002E10AC /* AppDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B51DE4928A97DCB002E10AC /* AppDependencies.swift */; };
 		8B51DE4D28A97E80002E10AC /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B51DE4C28A97E80002E10AC /* UINavigationController.swift */; };
 		8B5DE2F528AABAC400852B34 /* CustomTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5DE2F428AABAC400852B34 /* CustomTextFieldView.swift */; };
 		8B5DE2F728AABAE500852B34 /* CustomTextFieldViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5DE2F628AABAE500852B34 /* CustomTextFieldViewModel.swift */; };
@@ -214,7 +213,6 @@
 		8B40537928B59F3900E6E776 /* CostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostModel.swift; sourceTree = "<group>"; };
 		8B40537D28B5FBB700E6E776 /* Screen Size.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Screen Size.swift"; sourceTree = "<group>"; };
 		8B40537F28B5FC5100E6E776 /* SearchTagCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTagCollectionCell.swift; sourceTree = "<group>"; };
-		8B51DE4928A97DCB002E10AC /* AppDependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDependencies.swift; sourceTree = "<group>"; };
 		8B51DE4C28A97E80002E10AC /* UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
 		8B5DE2F428AABAC400852B34 /* CustomTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldView.swift; sourceTree = "<group>"; };
 		8B5DE2F628AABAE500852B34 /* CustomTextFieldViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFieldViewModel.swift; sourceTree = "<group>"; };
@@ -835,7 +833,6 @@
 				8B1B075C28AA321D00854E00 /* Testing */,
 				8B6B86F628A9932B0094E201 /* Custom UI */,
 				8B51DE4B28A97E6F002E10AC /* Extensions */,
-				8B51DE4928A97DCB002E10AC /* AppDependencies.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -1089,7 +1086,6 @@
 				2C1010F129EA696B0052367A /* AddressServiceDescription.swift in Sources */,
 				2C1010EB29EA68FD0052367A /* OrderServiceDescription.swift in Sources */,
 				2C1010E429E9B6480052367A /* MockAddressService.swift in Sources */,
-				8B51DE4A28A97DCB002E10AC /* AppDependencies.swift in Sources */,
 				2C28A2B328B633FC00233601 /* NotificationAndPictureModel.swift in Sources */,
 				2C5491B028B4DD460012032B /* OrderDetailsViewController.swift in Sources */,
 				2C5491AE28B4C7EE0012032B /* UIAlertController.swift in Sources */,
