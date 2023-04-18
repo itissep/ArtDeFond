@@ -204,8 +204,8 @@ class ProfileViewController: UIViewController, UICollectionViewDelegateFlowLayou
     
     private func layout(){
         view.backgroundColor = .white
-        
-        let menuImage = UIImage(named: "MenuIcon")
+
+        let menuImage = UIImage(systemName: "ellipsis")?.withTintColor(Constants.Colors.darkRed, renderingMode: .alwaysOriginal)
 
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: menuImage, style: .done, target: self, action: #selector(settingsButtonTapped))
         
