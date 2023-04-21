@@ -32,11 +32,11 @@ class AppCoordinator: AppCoordinatorDescription {
     }
 
     func goToAuth() {
-//        let authCoordinator = AuthCoordinator(navigationController: navigationController)
-//        authCoordinator.container = container
-//        authCoordinator.parentCoordinator = self
-//        children.append(authCoordinator)
-//        authCoordinator.start()
+        let authCoordinator = AuthCoordinator(navigationController: navigationController)
+        authCoordinator.container = container
+        authCoordinator.parentCoordinator = self
+        children.append(authCoordinator)
+        authCoordinator.start()
     }
 
     func goToHome() {

@@ -21,7 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
 
         FirebaseApp.configure()
-        registerMockDependencies()
+        
+        registerDependencies()
         
         let navigationController = UINavigationController()
         appCoordinator = AppCoordinator(navigationController: navigationController)

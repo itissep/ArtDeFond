@@ -33,12 +33,6 @@ class SignUpViewController: UIViewController {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nil, bundle: nil)
-        
-        title = "Регистрация"
-        navigationController?.navigationBar.backItem?.setHidesBackButton(true, animated: false)
-        self.tabBarController?.navigationItem.hidesBackButton = true
-        self.navigationItem.leftBarButtonItems = []
-        navigationItem.backButtonTitle = ""
     }
     
     required init?(coder: NSCoder) {
@@ -52,11 +46,20 @@ class SignUpViewController: UIViewController {
     }
     
     private func setup(){
+        navBarSetup()
         scrollViewSetup()
         emailLabelTextFieldSetup()
         passwordLabelTextFieldSetup()
         repeatPasswordLabelTextFieldSetup()
         nextButtonSetup()
+    }
+    
+    private func navBarSetup() {
+        title = "Регистрация"
+        navigationController?.navigationBar.backItem?.setHidesBackButton(true, animated: false)
+        self.tabBarController?.navigationItem.hidesBackButton = true
+        self.navigationItem.leftBarButtonItems = []
+        navigationItem.backButtonTitle = ""
     }
     
     private func scrollViewSetup(){
@@ -140,6 +143,4 @@ extension SignUpViewController: InterestViewControllerDelegateToFirstScreen{
     func DidRequestPassword() -> String {
         return passwordLabelTextField.returnText()
     }
-    
-    
 }

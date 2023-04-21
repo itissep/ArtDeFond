@@ -52,6 +52,8 @@
 		2C69677A29EEC15E0019783E /* ServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C69677929EEC15E0019783E /* ServiceError.swift */; };
 		2C69677D29EEE8C10019783E /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C69677C29EEE8C10019783E /* SettingsViewModel.swift */; };
 		2C69677F29EEF0C00019783E /* SettingType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C69677E29EEF0C00019783E /* SettingType.swift */; };
+		2C69678129EF154A0019783E /* AuthCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C69678029EF154A0019783E /* AuthCoordinator.swift */; };
+		2C69678329EF16F10019783E /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C69678229EF16F10019783E /* AuthViewModel.swift */; };
 		2C81DEE528BCA84500CAB6AD /* WaterfallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C81DEE428BCA84500CAB6AD /* WaterfallViewModel.swift */; };
 		2C8C13DC28B52A4900AC3921 /* OrderAndPictureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C13DB28B52A4900AC3921 /* OrderAndPictureModel.swift */; };
 		2C8C13DE28B52A7400AC3921 /* OrdersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8C13DD28B52A7400AC3921 /* OrdersTableViewCell.swift */; };
@@ -176,6 +178,8 @@
 		2C69677929EEC15E0019783E /* ServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceError.swift; sourceTree = "<group>"; };
 		2C69677C29EEE8C10019783E /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		2C69677E29EEF0C00019783E /* SettingType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingType.swift; sourceTree = "<group>"; };
+		2C69678029EF154A0019783E /* AuthCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCoordinator.swift; sourceTree = "<group>"; };
+		2C69678229EF16F10019783E /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		2C81DEE428BCA84500CAB6AD /* WaterfallViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterfallViewModel.swift; sourceTree = "<group>"; };
 		2C8C13DB28B52A4900AC3921 /* OrderAndPictureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OrderAndPictureModel.swift; path = "ArtDeFond/Scene/Order Info Screen/View/OrderAndPictureModel.swift"; sourceTree = SOURCE_ROOT; };
 		2C8C13DD28B52A7400AC3921 /* OrdersTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersTableViewCell.swift; sourceTree = "<group>"; };
@@ -435,6 +439,7 @@
 				2C69676E29EEB0430019783E /* Tabs Coordinators */,
 				8BAE09FD28A4F23D004CD53C /* AppCoordinator.swift */,
 				8BA9ECCA28ACF57D00DFF138 /* TabBarCoordinator.swift */,
+				2C69678029EF154A0019783E /* AuthCoordinator.swift */,
 				8BAE09FB28A4EFFB004CD53C /* Coordinator.swift */,
 			);
 			path = Coordinators;
@@ -458,6 +463,22 @@
 				2C69677C29EEE8C10019783E /* SettingsViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2C69678429EF16F50019783E /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2C69678229EF16F10019783E /* AuthViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2C69678529EF16FB0019783E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8BE7976528AF629300DC72D9 /* AuthViewController.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		2C81DEDC28BCA7AA00CAB6AD /* Search Screen */ = {
@@ -745,7 +766,8 @@
 		8BA9ECCC28AD091900DFF138 /* Auth Screen */ = {
 			isa = PBXGroup;
 			children = (
-				8BE7976528AF629300DC72D9 /* AuthViewController.swift */,
+				2C69678529EF16FB0019783E /* View */,
+				2C69678429EF16F50019783E /* ViewModel */,
 			);
 			path = "Auth Screen";
 			sourceTree = "<group>";
@@ -1044,6 +1066,7 @@
 				8BE7977328B0160D00DC72D9 /* CustomButtomType.swift in Sources */,
 				8B40538028B5FC5100E6E776 /* SearchTagCollectionCell.swift in Sources */,
 				2C97AFF228B2A951006CDD55 /* AddressesViewModel.swift in Sources */,
+				2C69678329EF16F10019783E /* AuthViewModel.swift in Sources */,
 				8BA9ECD528AD242800DFF138 /* FeedViewController.swift in Sources */,
 				2C69677029EEB0DB0019783E /* FeedCoordinator.swift in Sources */,
 				2C28A2AA28B61D1400233601 /* UIImageView.swift in Sources */,
@@ -1055,6 +1078,7 @@
 				2C8D7CA128B22E930036E784 /* ProfilePicturesTableCell.swift in Sources */,
 				2C1010DE29E9B4A80052367A /* MockOrderService.swift in Sources */,
 				2C1010D629E9B1FE0052367A /* MockData.swift in Sources */,
+				2C69678129EF154A0019783E /* AuthCoordinator.swift in Sources */,
 				2CB5905128B155B4005BFBB1 /* FeedViewModel.swift in Sources */,
 				8BA9ECCB28ACF57D00DFF138 /* TabBarCoordinator.swift in Sources */,
 				2C1010E629EA66A30052367A /* MockImageService.swift in Sources */,

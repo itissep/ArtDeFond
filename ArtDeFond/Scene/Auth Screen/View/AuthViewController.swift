@@ -8,13 +8,13 @@
 import UIKit
 import SnapKit
 import TPKeyboardAvoiding
+import Combine
 
 protocol AuthViewContollerDelegate: AnyObject{
     func DidLogin()
 }
 
 class AuthViewController: UIViewController {
-    
     private let scrollView = TPKeyboardAvoidingScrollView()
     private let contentView = UIView()
     private let iconImageView = UIImageView()
@@ -35,7 +35,13 @@ class AuthViewController: UIViewController {
     weak var delegate: AuthViewContollerDelegate?
     let authService = AuthService()
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+    private let viewModel: AuthViewModel
+    private var subscriptions = Set<AnyCancellable>()
+    
+    // MARK: - Life Cycle
+    
+    init(viewModel: AuthViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -46,7 +52,28 @@ class AuthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        bindingSetup()
     }
+    
+    private func bindingSetup() {
+        viewModel.$isError
+            .sink { [weak self] isError in
+                if isError {
+                    self?.showError()
+                }
+            }
+            .store(in: &subscriptions)
+    }
+    
+    private func showError() {
+        let alert = UIAlertController(title: "ууупс", message: "Кажется вы ввели что-то неправильно", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "Ок", style: .cancel)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true)
+    }
+    
+    // MARK: - UI Setup
     
     private func setup(){
         view.backgroundColor = .white
@@ -158,30 +185,17 @@ class AuthViewController: UIViewController {
         }
     }
     
+    // MARK: - Selectors
+    
     @objc
     private func tapOnSignInButton(){
-        authService.signIn(withEmail: emailLabelTextField.returnText(), withPassword: passwordLabelTextField.returnText()) { result in
-            switch result{
-            case .failure( _):
-                let alert = UIAlertController(title: "ууупс", message: "Кажется вы ввели что-то неправильно", preferredStyle: .alert)
-                
-                let cancelAction = UIAlertAction(title: "Ок", style: .cancel)
-                alert.addAction(cancelAction)
-                self.present(alert, animated: true)
-                break
-                
-            case.success():
-                self.delegate?.DidLogin()
-                break
-            }
-            
-        }
+        let emailString = emailLabelTextField.returnText()
+        let passwordString = passwordLabelTextField.returnText()
+        viewModel.signIn(withEmail: emailString, withPassword: passwordString)
     }
     
     @objc
     private func tapInSignUpButton(){
-        let navCont = UINavigationController.createForAuth()
-        navCont.pushViewController(SignUpViewController(), animated: false)
-        present(navCont, animated: true)
+        viewModel.goToSignUp()
     }
 }
